@@ -22,5 +22,29 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  STOP()
+  
+}
 
+void STOP() {
+  digitalWrite(fwdLeft,LOW);
+  digitalWrite(fwdRight,LOW);
+  digitalWrite(revLeft,LOW);
+  digitalWrite(revRight,LOW);  
+}
+
+void fwd() {
+  
+}
+
+void rev() {
+  
+}
+
+void left() {
+  
+}
+
+void right() {
+  
 }
