@@ -6,45 +6,62 @@
  * 
  */
 
-const fwdLeft = 5; // analog output pins 5,6,10,11
-const revLeft = 6; // analog output pins 5,6,10,11
-const fwdRight = 10; // analog output pins 5,6,10,11
-const revRight = 11; // analog output pins 5,6,10,11
+const fwdL = 5; // analog output pins 5,6,10,11
+const revL = 6; // analog output pins 5,6,10,11
+const fwdR = 10; // analog output pins 5,6,10,11
+const revR = 11; // analog output pins 5,6,10,11
 
 void setup() {
   // put your setup code here, to run once:
   // comment out if using PWM
-  pinMode(fwdLeft,OUTPUT);
-  pinMode(revLeft,OUTPUT);
-  pinMode(fwdRight,OUTPUT);
-  pinMode(revRight,OUTPUT);
+  pinMode(fwdL,OUTPUT);
+  pinMode(revL,OUTPUT);
+  pinMode(fwdR,OUTPUT);
+  pinMode(revR,OUTPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  STOP()
+  STOP();
+  delay(1000);
   
 }
 
 void STOP() {
-  digitalWrite(fwdLeft,LOW);
-  digitalWrite(fwdRight,LOW);
-  digitalWrite(revLeft,LOW);
-  digitalWrite(revRight,LOW);  
+  digitalWrite(fwdL,LOW);
+  digitalWrite(fwdR,LOW);
+  digitalWrite(revL,LOW);
+  digitalWrite(revR,LOW);  
 }
 
-void fwd() {
+void straightFwd() {
   
 }
 
-void rev() {
+void straightRev() {
   
 }
 
-void left() {
+void fwdLeft() {
   
 }
 
-void right() {
+void fwdRight() {
+  
+}
+
+void revLeft() {
+  
+}
+
+void revRight() {
+  
+}
+
+void cwSpin() {
+  
+}
+
+void ccwSpin() {
   
 }
