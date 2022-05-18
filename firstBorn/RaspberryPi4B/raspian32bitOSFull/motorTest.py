@@ -6,71 +6,70 @@ from time import sleep
 # This Python script will test the H-bridge and any connected DC motors
 #
 # specify H-Bridge control pins
-fwdL = 17 #23
-revL = 27 #24
-goL = None #22 # optional enable pin
-fwdR = 23 #17
-revR = 24 #27
+fwdL = 5 #23
+revL = 6 #24
+goL = None #13 # optional enable pin
+fwdR = 23 #5
+revR = 24 #6
 goR = None #25 # optional enable pin
 #
 # create Motor classes with independent control pins & enable speed control if desired
 motorLeft = Motor(fwdL,revL,None,pwm=True)
 motorRight = Motor(fwdR,revR,None,pwm=True)
 #
+# Define the motor speeds
+lSpd = 1
+rSpd = 1
+#
 # Define the directional control functions
 #
-v=1
 def stop():
     # Stop both motors
     motorLeft.stop()
     motorRight.stop()
 #
 # Specifying a value for v between 0 & 1 will control the motors' speed
-def straightFwd():
+def straightFwd(vl,vr):
     # Run both motors forward
-#    if v == None: v = 1
-    motorLeft.forward(speed=v)
-    motorRight.forward(speed=v)
+    motorLeft.forward(speed=vl) # 1 = Full Speed
+    motorRight.forward(speed=vr) # 1 = Full Speed
 #
-def straightRev():
+def straightRev(vl,vr):
     # Run both motors in reverse
-#    if v == None: v = 1
-    motorLeft.backward(speed=v)
-    motorRight.backward(speed=v)
+    motorLeft.backward(speed=vl) # 1 = Full Speed
+    motorRight.backward(speed=vr) # 1 = Full Speed
 #
-def fwdLeft():
+def fwdLeft(vl,vr):
     # Run right motor forward
-#    if v == None: v = 1
-    motorRight.forward(speed=v)
+    motorLeft.forward(speed=0) # vl) # 0 = Stopped
+    motorRight.forward(speed=vr)
 #
-def fwdRight():
+def fwdRight(vl,vr):
     # Run left motor forward
-#    if v == None: v = 1
-    motorLeft.forward(speed=v)
+    motorLeft.forward(speed=vl)
+    motorRight.forward(speed=0) # vr) # 0 = Stopped
 #
-def revLeft():
+def revLeft(vl,vr):
     # Run right motor forward
-#    if v == None: v = 1
-    motorRight.backward(speed=v)
+    motorLeft.backward(speed=0) # vl) # 0 = Stopped
+    motorRight.backward(speed=vr)
 #
-def revRight():
+def revRight(vl,vr):
     # Run left motor forward
-#    if v == None: v = 1
-    motorLeft.backward(speed=v)
+    motorLeft.backward(speed=vl)
+    motorRight.backward(speed=0) # vr) # 0 = Stopped
 #
-def cwSpin():
+def cwSpin(vl,vr):
     # Run left motor forward
     # Run right motor backward
-#    if v == None: v = 1
-    motorLeft.forward(speed=v)
-    motorRight.backward(speed=v)
+    motorLeft.forward(speed=vl)
+    motorRight.backward(speed=vr)
 #
-def ccwSpin():
+def ccwSpin(vl,vr):
     # Run left motor forward
     # Run right motor backward
-#    if v == None: v = 1
-    motorLeft.backward(speed=v)
-    motorRight.forward(speed=v)
+    motorLeft.backward(speed=vl)
+    motorRight.forward(speed=vr)
 #
 # Test the motors & H-Bridge
 # Run various control tests until poweroff
@@ -79,49 +78,49 @@ while True:
     print("STOPPED")
     sleep(1)
     print("STRAIGHT FORWARD")
-    straightFwd()
+    straightFwd(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("STRAIGHT REVERSE")
-    straightRev()
+    straightRev(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("FORWARD LEFT")
-    fwdLeft()
+    fwdLeft(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("FORWARD RIGHT")
-    fwdRight()
+    fwdRight(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("REVERSE LEFT")
-    revLeft()
+    revLeft(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("REVERSE RIGHT")
-    revRight()
+    revRight(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("CW SPIN")
-    cwSpin()
+    cwSpin(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
     sleep(1)
     print("CCW SPIN")
-    ccwSpin()
+    ccwSpin(lSpd,rSpd)
     sleep(1)
     stop()
     print("STOPPED")
