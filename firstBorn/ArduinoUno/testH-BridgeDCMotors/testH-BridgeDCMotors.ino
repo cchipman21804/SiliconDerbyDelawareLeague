@@ -28,10 +28,18 @@ void loop() {
 }
 
 void STOP() {
+// on/off version
   digitalWrite(fwdL,LOW);
   digitalWrite(fwdR,LOW);
   digitalWrite(revL,LOW);
-  digitalWrite(revR,LOW);  
+  digitalWrite(revR,LOW);
+
+// PWM speed control version
+//  analogWrite(fwdL,0);
+//  analogWrite(fwdR,0);
+//  analogWrite(revL,0);
+//  analogWrite(revR,0);
+
 }
 
 void straightFwd() {
