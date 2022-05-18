@@ -1,5 +1,6 @@
 # SiliconDerbyDelawareLeague
-
+Inspired by Eli "The Computer Guy" Etherton's [DojoDerbyMark3](https://github.com/elithecomputerguy/DojoDerbyMark3 "GitHub")
+https://silicondojo.com
 For more information:
 https://www.silicondojo.com/
 
