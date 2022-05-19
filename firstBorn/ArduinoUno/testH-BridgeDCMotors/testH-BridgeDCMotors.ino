@@ -6,10 +6,10 @@
  * 
  */
 
-const fwdL = 5; // analog output pins 5,6,10,11
-const revL = 6; // analog output pins 5,6,10,11
-const fwdR = 10; // analog output pins 5,6,10,11
-const revR = 11; // analog output pins 5,6,10,11
+const byte fwdL = 5; // analog output pins 5,6,10,11
+const byte revL = 6; // analog output pins 5,6,10,11
+const byte fwdR = 10; // analog output pins 5,6,10,11
+const byte revR = 11; // analog output pins 5,6,10,11
 
 void setup() {
   // put your setup code here, to run once:
@@ -29,9 +29,40 @@ void loop() {
   Serial.print("STRAIGHT FORWARD");
   straightFwd();
   delay(1000);
+  STOP();
+  Serial.print("STOPPED");
+  delay(1000);
   Serial.print("STRAIGHT REVERSE");
   straightRev();
   delay(1000);
+  STOP();
+  Serial.print("STOPPED");
+  delay(1000);
+  Serial.print("FORWARD LEFT");
+  fwdLeft();
+  delay(1000);
+  STOP();
+  Serial.print("STOPPED");
+  delay(1000);
+  Serial.print("FORWARD RIGHT");
+  fwdRight();
+  delay(1000);
+  STOP();
+  Serial.print("STOPPED");
+  delay(1000);
+  Serial.print("CW SPIN");
+  cwSpin();
+  delay(1000);
+  STOP();
+  Serial.print("STOPPED");
+  delay(1000);
+  Serial.print("CCW SPIN");
+  ccwSpin();
+  delay(1000);
+  STOP();
+  Serial.print("STOPPED");
+  delay(1000);
+  Serial.print("\n ******************** STARTING OVER ******************** \n");
 }
 
 void STOP() {
@@ -65,7 +96,7 @@ void straightFwd() {
 }
 
 void straightRev() {
-  // on/off version
+// on/off version
   digitalWrite(fwdL,LOW);
   digitalWrite(fwdR,LOW);
   digitalWrite(revL,HIGH);
@@ -79,25 +110,85 @@ void straightRev() {
 }
 
 void fwdLeft() {
-  
+// on/off version
+  digitalWrite(fwdL,LOW);
+  digitalWrite(fwdR,HIGH);
+  digitalWrite(revL,LOW);
+  digitalWrite(revR,LOW);
+
+// PWM speed control version
+//  analogWrite(fwdL,0);
+//  analogWrite(fwdR,255);
+//  analogWrite(revL,0);
+//  analogWrite(revR,0);
 }
 
 void fwdRight() {
-  
+// on/off version
+  digitalWrite(fwdL,HIGH);
+  digitalWrite(fwdR,LOW);
+  digitalWrite(revL,LOW);
+  digitalWrite(revR,LOW);
+
+// PWM speed control version
+//  analogWrite(fwdL,255);
+//  analogWrite(fwdR,0);
+//  analogWrite(revL,0);
+//  analogWrite(revR,0);
 }
 
 void revLeft() {
-  
+// on/off version
+  digitalWrite(fwdL,LOW);
+  digitalWrite(fwdR,LOW);
+  digitalWrite(revL,LOW);
+  digitalWrite(revR,HIGH);
+
+// PWM speed control version
+//  analogWrite(fwdL,0);
+//  analogWrite(fwdR,0);
+//  analogWrite(revL,0);
+//  analogWrite(revR,255);
 }
 
 void revRight() {
-  
+// on/off version
+  digitalWrite(fwdL,LOW);
+  digitalWrite(fwdR,LOW);
+  digitalWrite(revL,HIGH);
+  digitalWrite(revR,LOW);
+
+// PWM speed control version
+//  analogWrite(fwdL,0);
+//  analogWrite(fwdR,0);
+//  analogWrite(revL,255);
+//  analogWrite(revR,0);
 }
 
 void cwSpin() {
-  
+// on/off version
+  digitalWrite(fwdL,HIGH);
+  digitalWrite(fwdR,LOW);
+  digitalWrite(revL,LOW);
+  digitalWrite(revR,HIGH);
+
+// PWM speed control version
+//  analogWrite(fwdL,255);
+//  analogWrite(fwdR,0);
+//  analogWrite(revL,0);
+//  analogWrite(revR,255);
 }
 
 void ccwSpin() {
-  
+// on/off version
+  digitalWrite(fwdL,LOW);
+  digitalWrite(fwdR,HIGH);
+  digitalWrite(revL,HIGH);
+  digitalWrite(revR,LOW);
+
+// PWM speed control version
+//  analogWrite(fwdL,0);
+//  analogWrite(fwdR,255);
+//  analogWrite(revL,255);
+//  analogWrite(revR,0);
 }
