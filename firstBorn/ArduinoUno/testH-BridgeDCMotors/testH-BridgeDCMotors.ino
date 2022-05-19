@@ -67,10 +67,14 @@ void loop() {
   Serial.print("CCW SPIN\n");
   ccwSpin();
   delay(1000);
-  STOP();
+/*  
+ *   Redundant code
+ STOP();
   heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
+ *
+ */
   Serial.print("\n ******************** STARTING OVER ******************** \n");
 }
 
