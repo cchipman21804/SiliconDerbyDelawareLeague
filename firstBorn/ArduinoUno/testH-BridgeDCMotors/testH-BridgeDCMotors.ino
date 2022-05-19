@@ -10,6 +10,7 @@ const byte fwdL = 5; // analog output pins 5,6,10,11
 const byte revL = 6; // analog output pins 5,6,10,11
 const byte fwdR = 10; // analog output pins 5,6,10,11
 const byte revR = 11; // analog output pins 5,6,10,11
+const byte LED = 13; // on-board LED
 
 void setup() {
   // put your setup code here, to run once:
@@ -18,48 +19,56 @@ void setup() {
   pinMode(revL,OUTPUT);
   pinMode(fwdR,OUTPUT);
   pinMode(revR,OUTPUT);
+  pinMode(LED, OUTPUT);
   Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("STRAIGHT FORWARD\n");
   straightFwd();
   delay(1000);
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("STRAIGHT REVERSE\n");
   straightRev();
   delay(1000);
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("FORWARD LEFT\n");
   fwdLeft();
   delay(1000);
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("FORWARD RIGHT\n");
   fwdRight();
   delay(1000);
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("CW SPIN\n");
   cwSpin();
   delay(1000);
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("CCW SPIN\n");
   ccwSpin();
   delay(1000);
   STOP();
+  heartBeat();
   Serial.print("STOPPED\n");
   delay(1000);
   Serial.print("\n ******************** STARTING OVER ******************** \n");
@@ -191,4 +200,22 @@ void ccwSpin() {
 //  analogWrite(fwdR,255);
 //  analogWrite(revL,255);
 //  analogWrite(revR,0);
+}
+
+void heartBeat() {
+  digitalWrite(LED,HIGH);
+  delay(250);
+  digitalWrite(LED,LOW);
+  delay(250);
+  digitalWrite(LED,HIGH);
+  delay(250);
+  digitalWrite(LED,LOW);
+  delay(500);
+  digitalWrite(LED,HIGH);
+  delay(250);
+  digitalWrite(LED,LOW);
+  delay(250);
+  digitalWrite(LED,HIGH);
+  delay(250);
+  digitalWrite(LED,LOW);
 }
