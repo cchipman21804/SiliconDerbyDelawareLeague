@@ -4,7 +4,7 @@ Inspired by Eli "The Computer Guy" Etherton's [DojoDerbyMark3](https://github.co
 For more information:
 https://www.silicondojo.com/
 
-Parts List
+Parts Lists:
 |Preferred|Alternative 1|Alternative 2|
 |------------------------------------|------------------------------------|------------------------------------|
 Amazon|Mouser|Jameco|
