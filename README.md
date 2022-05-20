@@ -5,8 +5,8 @@ For more information:
 https://www.silicondojo.com/
 
 ## Parts Lists:
-|### Preferred #
-|### Alternative 1#
+|### Preferred # 
+|### Alternative 1# 
 |### Alternative 2# |
 |------------------------------------|------------------------------------|------------------------------------|
 |#### Amazon ####|Mouser|Jameco|
