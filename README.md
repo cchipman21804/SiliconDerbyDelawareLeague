@@ -5,7 +5,9 @@ For more information:
 https://www.silicondojo.com/
 
 ## Parts Lists:
-|### Preferred ###|Alternative 1|Alternative 2|
+|### Preferred #
+|### Alternative 1#
+|### Alternative 2# |
 |------------------------------------|------------------------------------|------------------------------------|
 |#### Amazon ####|Mouser|Jameco|
 [Smart Caterpillar Track Car Chassis](https://www.amazon.com/dp/B09TFQPGT8/?coliid=I1HFKL0RK2J9PK&colid=2RY6A0APMHVZN&psc=1&ref_=lv_ov_lig_dp_it "Smart Caterpillar Track Car Chassis")|[DF Robot ROB0153](https://www.mouser.com/ProductDetail/426-ROB0153 "DF Robot ROB0153")|[Dagu Rover 5 Tracked Chassis](https://www.jameco.com/z/RS011-0-2-Dagu-HiTech-Electronic-Dagu-Rover-5-Tracked-Chassis_2143865.html "Dagu Rover 5 Tracked Chassis")|
