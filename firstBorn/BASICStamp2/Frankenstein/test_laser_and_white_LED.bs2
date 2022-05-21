@@ -1,0 +1,25 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+voicebox  PIN 9
+muscle    PIN 8
+ir     PIN 2
+white     PIN 1
+laser        PIN 0
+
+'FREQOUT voicebox, 100, 2500                'BEEP BEEP!
+'PAUSE 100
+'FREQOUT voicebox, 100, 2500
+
+'DTMFOUT voicebox, [3,6,2,8,1,6,3]          'Dial my cellphone
+
+DO                                         'Display a lightshow indefinitely
+HIGH laser
+PAUSE 500
+LOW laser
+PAUSE 500
+HIGH white
+PAUSE 500
+LOW white
+PAUSE 500
+LOOP

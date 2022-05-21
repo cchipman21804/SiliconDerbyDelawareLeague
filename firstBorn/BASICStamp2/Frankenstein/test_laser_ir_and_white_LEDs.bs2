@@ -1,0 +1,17 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+voicebox  PIN 9
+muscle    PIN 8
+laser     PIN 2
+white     PIN 1
+ir        PIN 0
+
+whichlight    VAR   Nib
+
+DO                                         'Display a lightshow indefinitely
+  FOR whichlight=0 TO 7
+  OUTL.LOWNIB = whichlight
+  PAUSE 500
+  next
+LOOP

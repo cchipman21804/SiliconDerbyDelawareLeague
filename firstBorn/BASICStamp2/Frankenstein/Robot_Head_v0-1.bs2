@@ -1,0 +1,157 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+'R O B O T   H E A D   v1.0
+
+'* * * * * * * * * * * *
+'* General Description *
+'* * * * * * * * * * * *
+
+'This program will track a light source facing a robot's head.  The head will have two binocular photoresistors on the
+'front to track the light source and one photoresistor on the back to measure the ambient light level as a reference.
+
+'An LED bargraph will track the position of the light source:
+
+'All LED's will be off if the RearEye is brighter than the LeftEye AND the RightEye.
+'The rightmost LED is lit if RightEye is brighter than the LeftEye AND the RearEye.
+'The leftmost LED is lit if LeftEye is brighter than the RightEye AND the RearEye.
+'When both LeftEye AND RightEye are brighter than RearEye, the LED will show the relative
+'position of the light source in relation to the brightness of the light on LeftEye and RightEye.
+'The value of the Eye variables is sent to the serial terminal.
+
+'* * * * * * * * * *
+'* Initialization  *
+'* * * * * * * * * *
+
+'Pins 0-9 drive the LED bargraph as outputs.  Pins 15 and 14, as inputs, measure the discharge time of capacitors on
+'those pins through the photoresistors.  The lower the discharge time, the brighter the light on that "eye".
+
+DIRS=$03FF
+
+LeftOpticNerve   PIN    15                  'Black wire from robot's head.
+RightOpticNerve  PIN    14                  'Green wire from robot's head.
+'RearOpticNerve  PIN    13                  'Currently unused.
+
+capacitance      CON    100                 '100 pF capacitors are currently installed on the breadboard.
+                                            'Larger values are needed to improve the sensor resolution.
+
+LeftEye          VAR    Word
+RightEye         VAR    Word
+'RearEye         VAR    Word                'Currently unused.
+
+bargraph         VAR    Word
+
+'Desired bargraph bit pattern display as tracked light source moves left to right.
+'
+' PPPPPPPPPP
+' 9876543210    'Light source is to the left.
+'%1000000000
+'%1100000000
+'%0100000000
+'%0110000000
+'%0010000000
+'%0011000000
+'%0001000000
+'%0001100000
+'%0000100000
+'%0000110000    'Light source is centered.
+'%0000010000
+'%0000011000
+'%0000001000
+'%0000001100
+'%0000000100
+'%0000000110
+'%0000000010
+'%0000000011
+'%0000000001    'Light source is to the right.
+
+
+'* * * * * * * * * * * * * * *
+'* Initialize ANSI terminal  *
+'* * * * * * * * * * * * * * *
+
+PAUSE 1000
+DEBUG   $1B, $5B, "0m",                            'Set ANSI screen attributes to gray text on
+        $1B, $5B, "2J",                            'black background and clear the screen.
+        $1B, $5B, "1;28fROBOT HEAD v1.0",          'Display headings.
+        $1B, $5B, "2;0fLeft Eye:       uSeconds",
+        $1B, $5B, "2;45fRight Eye:       uSeconds"
+'debug  $1B, $5B, "2;30f"Rear Eye:",               'Currently unused.
+
+'* * * * * * * * *
+'* Main Program  *
+'* * * * * * * * *
+
+  DO                                         'Perform this loop forever.
+    GOSUB poll_optic_nerves                  'Get lighting data from photoresistors.
+    GOSUB calculate_sensor_resistance        'Convert capacitor discharge time to sensor resistance.
+'    GOSUB update_bargraph                    'Update bargraph display.
+    GOSUB display_report                     'Update serial ANSI terminal.
+  LOOP
+  END
+
+'* * * * * * * *
+'* Subroutines *
+'* * * * * * * *
+
+poll_optic_nerves:
+
+                                             'Apply +5 volts (HIGH) to charge the capacitors on the optic nerves...
+'    HIGH RearOpticNerve                     'Check the rear eye first to get a reference on the ambient light.
+    HIGH LeftOpticNerve
+    HIGH RightOpticNerve
+    PAUSE 1                                  '...for at least 1 millisecond.
+'    RCTIME RearOpticNerve, 1, RearEye        'Allow the RearEye capacitor to discharge and store the discharge time.
+    RCTIME LeftOpticNerve, 1, LeftEye        'Allow the LeftEye capacitor to discharge and store the discharge time.
+    RCTIME RightOpticNerve, 1, RightEye      'Allow the RightEye capacitor to discharge and store the discharge time.
+
+'* * * * *
+'* Notes *
+'* * * * *
+
+'Left Eye:   3.75Kohm     804Kohm
+'Right Eye:  3.38Kohm     630Kohm
+'LR Light:      ON          OFF
+
+'Calculate appropriate capacitor values to balance discharge times.
+'1000pF would discharge in 2 uSeconds through a 2Kohm load.
+
+'533pF would discharge in 2 uSeconds through a 3.75Kohm load.
+'592pF would discharge in 2 uSeconds through a 3.38Kohm load.
+
+'533pF would discharge in 429 uSeconds through a 804Kohm load.
+'592pF would discharge in 373 uSeconds through a 630Kohm load.
+
+'100pF would discharge in 0.375 uSeconds through a 3.75Kohm load.
+'100pF would discharge in 0.338 uSeconds through a 3.38Kohm load.
+'100pF would discharge in 80 uSeconds through a 804Kohm load.
+'100pF would discharge in 63 uSeconds through a 630Kohm load.
+
+'Don't compare the "real-time" sensor values to each other in "real-time" because the resistance of the sensors is slow
+'to react when the scene changes from light to dark.  Rather compare the "real-time" sensor value to a past (stored)
+'value to determine whether the light level is changing from light-to-dark or dark-to-light.
+
+RETURN
+
+calculate_sensor_resistance:
+                                               'T=RC       R=T/C       R(Kohms)=1000T(uS)/C(pF)
+    LeftEye=LeftEye*2 '000/capacitance           'Multiply sensor readings by 2 for discharge time in microseconds.
+    RightEye=RightEye*2 '000/capacitance
+
+RETURN
+
+display_report:
+    DEBUG $1B, $5B, "2;11f", DEC5 LeftEye,
+          $1B, $5B, "2;56f", DEC5 RightEye
+
+RETURN
+
+update_bargraph:
+    OUTC=%0011
+    OUTL=%11111111
+    PAUSE 500
+    OUTC=%0000
+    OUTL=%00000000
+    PAUSE 500
+RETURN
+END

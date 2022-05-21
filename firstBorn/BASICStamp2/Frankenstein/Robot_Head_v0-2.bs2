@@ -1,0 +1,203 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+'R O B O T   H E A D   v1.1
+
+'* * * * * * * * * * * *
+'* General Description *
+'* * * * * * * * * * * *
+
+'This program will track a light source facing a robot's head.  The head will have two binocular photoresistors on the
+'front to track the light source and one photoresistor on the back to measure the ambient light level as a reference.
+
+'The value of the Eye variables is sent to the ANSI serial terminal.
+
+'An LED bargraph will track the position of the light source:
+'All LED's will be off if RearEye is brighter than LeftEye AND RightEye.
+'The rightmost LED is lit if RightEye is brighter than LeftEye AND CenterEye.
+'The leftmost LED is lit if LeftEye is brighter than RightEye AND CenterEye.
+
+'When both LeftEye AND RightEye are brighter than CenterEye, the LED bargraph will show the relative
+'position of the light source in relation to the brightness of the light on LeftEye and RightEye.
+
+'* * * * * * * * * *
+'* Initialization  *
+'* * * * * * * * * *
+
+'Pins 0-9 drive the LED bargraph as outputs.  Pins 15, 14, and 13, as inputs, measure the discharge time of capacitors
+'on those pins through the photoresistors.  The lower the discharge time, the brighter the light on that "eye".
+
+DIRS=$03FF
+
+LeftOpticNerve          PIN    15      'Black wire from robot's head.
+RightOpticNerve         PIN    14      'Green wire from robot's head.
+CenterOpticNerve        PIN    13      'Red wire from robot's head.
+                                       'A second red wire is common (ground).
+
+LeftEye                 VAR    Word    'These variables measure the discharge
+RightEye                VAR    Word    'time of the capacitors through the
+CenterEye               VAR    Word    'photoresistors of each eye.
+
+LeftEyeResistance       VAR    Word    'Calculated resistance values
+RightEyeResistance      VAR    Word    'of each photoresistor for the
+CenterEyeResistance     VAR    Word    'ANSI serial terminal report.
+
+capacitance             CON    10000   '0.01 uF capacitors currently installed on the breadboard.
+
+                                       '3.3 uF capacitors were too large. The values of the xxxxEye variables roll
+                                       'over to zero (past 65535) when the corresponding eye is darkened.
+
+                                       '100pF capacitors were too small.  The values of the xxxxEye variables
+                                       'stayed near 2 microseconds when the lights were on.
+
+prev_x_axis             VAR    Nib     'column (0-9) on ANSI terminal display screen of previous reading for
+                                       'for blanking the previous "LED"
+
+x_axis                  VAR    Nib     'column (0-9) on ANSI terminal to display current position of "LED"
+
+light_on                CON    88      'ASCII character "X"
+light_off               CON    32      'ASCII character [SPACE]
+
+bargraph_index          VAR    Nib
+bargraph_display        VAR    Word
+
+'* * * * * * * * * * * * * * *
+'* Initialize ANSI terminal  *
+'* * * * * * * * * * * * * * *
+
+PAUSE 1000
+
+DEBUG   $1B, $5B, "0m",                                  'Set ANSI screen attributes to gray text on a black background
+        $1B, $5B, "2J",                                  'and clear the screen.
+        $1B, $5B, "1;30fROBOT HEAD v1.1",                'Display headings at various cursor positions.
+        $1B, $5B, "3;0fLeft Eye:       (x2) uSeconds",
+        $1B, $5B, "3;45fRight Eye:       (x2) uSeconds",
+        $1B, $5B, "5;23fRear Eye:       (x2) uSeconds",
+        $1B, $5B, "7;", DEC prev_x_axis, "f", light_off,
+        $1B, $5B, "7;", DEC x_axis, "f", light_on        'Duplicate an LED bargraph on ANSI terminal screen.
+                                                         'x_axis is the column on the ANSI terminal screen where the
+                                                         'character indicating the light's position is displayed.
+                                                         'light_on|light_off are the actual ASCII characters -
+                                                         'either "X" (DEC88) or [SPACE] (DEC32).
+
+prev_x_axis=x_axis                                       'Store current x_axis in prev_x_axis
+
+'* * * * * * * * *
+'* Main Program  *
+'* * * * * * * * *
+
+  DO                                         'Perform this loop forever.
+    GOSUB poll_optic_nerves                  'Get lighting data from photoresistors.
+'    GOSUB update_bargraph                    'Update bargraph display.
+    GOSUB display_report                     'Update serial ANSI terminal.
+  LOOP
+  END
+
+'* * * * * * * *
+'* Subroutines *
+'* * * * * * * *
+
+poll_optic_nerves:
+
+                                             'Apply +5 volts (HIGH) to charge the capacitors on the optic nerves.
+    HIGH CenterOpticNerve                    'Check the rear eye first to get a reference on the ambient light.
+    HIGH LeftOpticNerve
+    HIGH RightOpticNerve
+
+    PAUSE 1                                  'Charge the capacitors for at least 1 millisecond for a full +5V charge.
+
+                                             '220 ohm (in the port lines) * 0.01uF = 2.2uS = 1 RC time constant
+                                             '2.2uS * 5 time constants (for full charge) = 11 microseconds.
+                                             '11uS + 20% (for tolerances) = 13.2uS.
+
+    RCTIME CenterOpticNerve, 1, CenterEye    'Allow the CenterEye capacitor to discharge and store the discharge time.
+    RCTIME LeftOpticNerve, 1, LeftEye        'Allow the LeftEye capacitor to discharge and store the discharge time.
+    RCTIME RightOpticNerve, 1, RightEye      'Allow the RightEye capacitor to discharge and store the discharge time.
+
+RETURN
+
+'Desired bargraph bit pattern display as tracked light source moves left to right.
+'
+'         PP,PPPP,PPPP
+' HEX,    98,7654,3210
+'$200, %0010,0000,0000    'Light source is to the left.    RightEye / LeftEye    >  1
+'$300, %0011,0000,0000                                     RightEye - LeftEye   <= 50
+'$100, %0001,0000,0000                                                          <= 40
+'$180, %0001,1000,0000                                                          <= 35
+'$080, %0000,1000,0000                                                          <= 30
+'$0C0, %0000,1100,0000                                                          <= 25
+'$040, %0000,0100,0000                                                          <= 20
+'$060, %0000,0110,0000                                                          <= 15
+'$020, %0000,0010,0000    'Light source is centered.       RightEye - LeftEye   <= 10
+'$030, %0000,0011,0000    'Light source is centered.       ABS LeftEye-RightEye <=  5
+'$010, %0000,0001,0000    'Light source is centered.       LeftEye - RightEye   <= 10
+'$018, %0000,0001,1000                                                          <= 15
+'$008, %0000,0000,1000                                                          <= 20
+'$00C, %0000,0000,1100                                                          <= 25
+'$004, %0000,0000,0100                                                          <= 30
+'$006, %0000,0000,0110                                                          <= 35
+'$002, %0000,0000,0010                                                          <= 40
+'$003, %0000,0000,0011                                     LeftEye - RightEye   <= 50
+'$001, %0000,0000,0001    'Light source is to the right.   LeftEye / RightEye    >  1
+
+update_bargraph:
+    IF CenterEye < LeftEye AND CenterEye < RightEye THEN
+           bargraph_display=0
+    ELSEIF RightEye > LeftEye THEN
+           SELECT RightEye / LeftEye
+           CASE > 1
+                bargraph_display = $200
+           CASE ELSE
+                LOOKDOWN RightEye-LeftEye, > [0, 5, 10, 15, 20, 25, 30, 35, 40, 50], bargraph_index
+                LOOKUP bargraph_index, [$030, $020, $060, $040, $0C0, $080, $180, $100, $300, $200], bargraph_display
+           ENDSELECT
+    ELSEIF LeftEye > RightEye THEN
+           SELECT LeftEye / RightEye
+           CASE > 1
+                bargraph_display = $200
+           CASE ELSE
+                LOOKDOWN LeftEye-RightEye, > [0, 5, 10, 15, 20, 25, 30, 35, 40, 50], bargraph_index
+                LOOKUP bargraph_index, [$030, $010, $018, $008, $00C, $004, $006, $002, $003, $001], bargraph_display
+           ENDSELECT
+    ELSE
+      DEBUG $1B, $5B, "1;5;31m", $1B, $5B, "10;30fBARGRAPH ERROR"
+      END
+    ENDIF
+    OUTC=bargraph_display.HIGHBYTE.LOWNIB
+    OUTB=bargraph_display.LOWBYTE.HIGHNIB
+    OUTA=bargraph_display.LOWBYTE.LOWNIB
+RETURN
+
+display_report:
+    DEBUG $1B, $5B, "3;11f", DEC5 LeftEye,
+          $1B, $5B, "3;56f", DEC5 RightEye,
+          $1B, $5B, "5;33f", DEC5 CenterEye
+
+RETURN
+END
+
+'* * * * *
+'* Notes *
+'* * * * *
+
+'Left Eye:   3.75Kohm     804Kohm
+'Right Eye:  3.38Kohm     630Kohm
+'LR Light:      ON          OFF
+
+'Calculate appropriate capacitor values to balance discharge times.
+'1000pF would discharge in 2 uSeconds through a 2Kohm load.
+
+'533pF would discharge in 2 uSeconds through a 3.75Kohm load.
+'592pF would discharge in 2 uSeconds through a 3.38Kohm load.
+
+'533pF would discharge in 429 uSeconds through a 804Kohm load.
+'592pF would discharge in 373 uSeconds through a 630Kohm load.
+
+'100pF would discharge in 0.375 uSeconds through a 3.75Kohm load.
+'100pF would discharge in 0.338 uSeconds through a 3.38Kohm load.
+'100pF would discharge in 80 uSeconds through a 804Kohm load.
+'100pF would discharge in 63 uSeconds through a 630Kohm load.
+
+'Don't compare the "real-time" sensor values to each other in "real-time" because the resistance of the sensors is slow
+'to react when the scene changes from light to dark.  Rather compare the "real-time" sensor value to a past (stored)
+'value to determine whether the light level is changing from light-to-dark or dark-to-light.

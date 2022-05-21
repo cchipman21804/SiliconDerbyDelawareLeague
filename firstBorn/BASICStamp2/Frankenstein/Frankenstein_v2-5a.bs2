@@ -1,0 +1,887 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+'F R A N K E N S T E I N   v2.5
+
+'* * * * * * * * * * * *
+'* General Description *
+'* * * * * * * * * * * *
+
+'This hardware prototype is an upgrade to Frankenstein's hard-wired TTL logical neurons (v1.0).
+
+'Pins 15 & 14 track a light source facing the robot's head.  Two photoresistors are mounted on the front at a 90 degree
+'angle with each other to track the light source.  A servo moves a "finger" to point in the approximate direction of
+'the light source.  Later, the servo will rotate the entire circuit board to keep the photoresistors pointed at the
+'light source. Frankenstein will then steer toward the light until the servo is centered. Then keep the servo centered
+'as he drives closer to the light source.
+
+'Pin 13 monitors the ambient air temperature with a thermistor.  If the ambient air temperature exceeds a preset value,
+'the "voicebox" spells "TOO HOT " in Morse Code.  Frankenstein then attempts to back away from the heat source.
+
+'Pin 12 monitors an IR phototransistor discharging a parallel capacitor. It is mounted adjacent to the IR Flood Lamp on
+'Frankenstein's raygun to pick up reflections of the IR beam from obstacles to the rear.
+
+'Pin 11 monitors the output of an op-amp comparing the servo battery voltage to a PWM reference voltage. When the servo
+'battery voltage drops below the PWM reference voltage generated at Pin 10 (Low_Voltage_Threshold), the op-amp signals
+'pin 11 (Battery_6V) by bringing it LOW. The PWM output pin needs an RC network to temporarily store the voltage during
+'program execution. A 1Kohm resistor and a 3.3uF capacitor between the PWM output pin [10] and the "-" input of the
+'op-amp smooth and store the PWM voltage long enough for the Frankenstein program to check the output of the op-amp after
+'setting the reference voltage. If the 6V battery is low, the voicebox spells "6V BATT LOW " in Morse Code.
+
+'Pin 9 drives a piezo speaker element - the "voicebox" for audible communication - Morse, tunes, tones, DTMF, etc.
+
+'Pin 8 drives a servo for pivoting the head left and right 180 degrees for pointing the photoresistors at a light source.
+
+'Pin 7 monitors a 38 kHz IR remote control receiver for binary signals.  If this sensor is not feasible, this pin will be
+'used to monitor the CPU's 9-volt battery in a similar manner as the 6-volt battery.
+
+'Pins 6, 5 and 4 independently select 3 types of light sources on Frankenstein's raygun:
+'P654
+'%000 -- All lamps off
+'%100 -- Activate a 48mW IR floodlamp
+'%010 -- Activate a white LED
+'%001 -- Activate a 5mW red LASER
+
+'Pins 3-0 control Frankenstein's motion as follows:
+'Pins 3 and 2 select Forward/Reverse/Stop.  PWM may be able to adjust the speed of the motors.
+'%00 -- STOP
+'%01 -- Reverse
+'%10 -- Forward
+'%11 -- STOP (not needed but an inherent function of the circuitry)
+
+'Pins 1 and 0 steer Straight/Left/Right.  PWM will not be necessary to adjust the speed of the servo. Binary only.
+'%00 -- Straight
+'%01 -- Right Turn
+'%10 -- Left Turn
+'%11 -- Straight (not needed but an inherent function of the circuitry)
+
+'* * * * * * * * * * * * * * * * * * * * * * * * *
+'* Initialize I/O pins, variables, and constants *
+'* * * * * * * * * * * * * * * * * * * * * * * * *
+
+'      1111 11
+'Pin   5432 1098 7654 3210
+'DIRS=%0000 0111 0111 1111
+'     $   0    7    7    F
+
+DIRS =$077F
+
+LeftOpticNerve          PIN    15      'Photoresistor facing left monitors ambient visible light.
+RightOpticNerve         PIN    14      'Photoresistor facing right monitors ambient visible light.
+
+TemperatureNerve        PIN    13      'Thermistor monitors ambient air temperature.
+
+Rear_Photo_Bumper       PIN    12      'Ordinary IR phototransistor will pick up reflections from the IR Flood Lamp to
+                                       'detect obstacles.
+
+Battery_6V              PIN    11      'The output of an op-amp goes LOW when the servo power supply voltage drops below
+                                       'the PWM voltage from PIN 10 feeding the op-amp's "-" input.
+
+Compare_this_voltage    PIN    10      'PWM output voltage to op-amp monitoring servo & lighting power supply.
+
+Voicebox                PIN    9       'Piezo speaker element (used for beeps, musical notes, DTMF, tones up to 32767
+                                       'Hz, communicate with boss audibly via Morse)
+
+Muscle_Nerve            PIN    8       'Parallax Servo control output.
+
+IR_RC_Receiver          PIN    7       'A 38 kHz IR binary receiver output goes LOW when it detects a 38 kHz infra-red
+                                       'signal.  This cannot be used with the IR_Flood_Lamp. FREQOUT commands only
+                                       'accept frequency commands up to 32767 Hz. Need to use the ordinary infra-red
+                                       'phototransistor with the IR_Flood_Lamp.  Possibly use it as a remote control to
+                                       'switch behavior pattern during program execution.
+
+'Battery_9V             PIN    7       'If the above sensor is not feasible, this pin will be used to monitor the 9V CPU
+                                       'battery in a manner similar to the 6V illumination/servo/drive/steering battery.
+                                       '                           _
+IR_Flood_Lamp           PIN    6       '48mW Infrared Flood Lamp    |
+White_Light             PIN    5       'Bright White LED            }-- Frankenstein's RayGuns
+Red_LASER               PIN    4       '5 mW red LASER diode       _|
+
+Drive_Fwd               PIN    3       'These two bits control forward & reverse motion: %00 or %11:STOP; %01:Reverse
+Rvs                     PIN    2       '%10:Forward. Try using PWM on these pins to control ground speed.
+
+Steer_Left              PIN    1       'These two bits steer left and right: %00 or %11:Straight; %01:Right Turn;
+Steer_Right             PIN    0       '%10:Left Turn. Steering controls are binary only - not PWM compatible.
+
+'The following variables and constants control the steering and drive motors.
+
+action                  VAR    Nib     'The value of this variable is sent to OUTL.LOWNIB [PINS 3-0] to control the
+                                       'steering and drive motors.
+
+at_this_speed           CON    127     '50% (127/255) speed (used in PWM mode)
+for_this_long           CON    1000    'amount of time in milliseconds to activate the drive motor pin during PWM mode.
+full_speed_ahead        CON    8       'Drive straight forward at full speed.
+back_up_full_speed      CON    4       'Reverse straight back at full speed.
+left_turn               CON    2       'Steer Left.
+right_turn              CON    1       'Steer Right.
+straight                CON    0       'Go straight.
+sit_still               CON    0       'All motors off. (Sit still.)
+
+'The following variables and constants store and measure the value of the light, heat, and obstacle sensors.
+
+tLeftEye                VAR    Word    'These variables store the discharge time of the capacitors through the
+tRightEye               VAR    Word    'photoresistors of each eye, the thermistor, and the IR_Photo_Bumper.
+Temperature             VAR    Word
+IR_Bumper               VAR    Word
+dark                    CON    2000    'Define "dark" threshold.
+High_Temp               CON    62      'Threshold of high temperature alarm expressed in a value measured in (x2) usecs.
+
+'The following variables are for calculating the light level and Morse Code functions.
+
+Negative                CON    1       ' For negative numbers
+light                   VAR    Word    ' Brightness/darkness indicator
+n                       VAR    Word    ' Numerator
+d                       VAR    Word    ' Denominator
+q                       VAR    Word    ' Quotient designates difference in shading on the eyes
+sumDiff                 VAR    Word    ' For sum and difference calcs
+duty                    VAR    Byte    ' PWM duty argument variable.  Also sets how long to "BEEP" during a Morse
+                                       ' character. DITS & DAHS are stored in DATA statements as 1's and 3's
+                                       ' respectively. Pauses are stored as 0's.
+minimum                 CON    70      ' Minimum PWM duty cycle for light sensing subroutines
+wpm                     CON    80      ' =15wpm. Sets words per minute rate [1200 / wpm = duty.NIBBLE milliseconds]
+tone                    CON    2500    ' What frequency (in Hertz)?
+i                       VAR    Byte    ' Index counting variable. Also selects Morse Code characters in EEPROM [$00-$CF]
+                                       ' from the DATA directives below.
+temp                    VAR    Nib     ' Temp storage for calcs.
+
+'The following constants and variables are used to keep an eye on the status of the batteries.
+
+                                       'Use a voltage divider to sample a fraction of the full 6V servo battery voltage
+                                       '(circa 4.9 volts).
+to_the_6V_battery       CON    170     'PWM value compared to servo battery voltage (circa 4.2 volts DC from sampling
+                                       'voltage divider.)
+                                       'Use a voltage divider to sample approximately 1/2 of the full 9V battery voltage
+                                       '(circa 4.5 volts). The on-board 5V voltage regulator will continue to function
+                                       'until the 9-volt battery drops below about 6 volts.
+to_the_9V_battery       CON    127     'PWM value compared to 1/2 CPU battery voltage (circa 3.0 volts DC from sampling
+                                       'voltage divider.)
+NOT_OK                  CON    0       'For the battery tests described above. The op-amps signal "NOT_OK" when a
+                                       'battery's voltage drops below the reference voltage generated by the
+                                       '"Compare_this_voltage" PWM signal at PIN 10.
+rests                   VAR    Nib     'Count of rests to give the 6-volt battery a chance to recover.
+max_rests               CON    5       'Maximum number of rests before executing conserve_power mode.
+
+'The following constants are used to determine if an IR remote control signal is present. 0 = PRESENT; 1 = ABSENT
+
+present                 CON    0
+absent                  CON    1
+
+'The following constants are used to set predetermined points on the servo's arc of travel.
+
+near_center             CON    50      'Test for near center point.
+centered                CON    650     'Approximate center point of the servo's arc of travel.
+full_left               CON    1100    'Don't make this any higher than 1150 - VERY close to mech limit!
+full_right              CON    220     'Don't make this any lower than 220 - VERY close to mech limit!
+
+'* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+'* Morse Alphabet, Numerals, Punctuation, and Prosigns *
+'* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+DATA $00,$00,$00,$22           '<Space>                     - @$00 <Space> is first [@$00] because it is used most often.
+'DATA 0,0,0,0,0,0,0,2          '                                   It needs to be easy to find.
+
+DATA $10,$30,$22               '"A"                         - @$04
+'DATA 1,0,3,0,2
+
+DATA $31,$11,$00,$22           '"B"                         - @$07
+'DATA 3,1,1,1,0,2
+
+DATA $31,$31,$00,$22           '"C"                         - @$0B
+'DATA 3,1,3,1,0,2
+
+DATA $31,$10,$22               '"D"                         - @$0F
+'DATA 3,1,1,0,2
+
+DATA $10,$22                   '"E"                         - @$12
+'DATA 1,0,2
+
+DATA $11,$31,$00,$22           '"F"                         - @$14
+'DATA 1,1,3,1,0,2
+
+DATA $33,$10,$22               '"G"                         - @$18
+'DATA 3,3,1,0,2
+
+DATA $11,$11,$00,$22           '"H"                         - @$1B
+'DATA 1,1,1,1,0,2
+
+DATA $11,$00,$22               '"I"                         - @$1F
+'DATA 1,1,0,2
+
+DATA $13,$33,$00,$22           '"J"                         - @$22
+'DATA 1,3,3,3,0,2
+
+DATA $31,$30,$22               '"K"                         - @$26
+'DATA 3,1,3,0,2
+
+DATA $13,$11,$00,$22           '"L"                         - @$29
+'DATA 1,3,1,1,0,2
+
+DATA $33,$00,$22               '"M"                         - @$2D
+'DATA 3,3,0,2
+
+DATA $31,$00,$22               '"N"                         - @$30
+'DATA 3,1,0,2
+
+DATA $33,$30,$22               '"O"                         - @$33
+'DATA 3,3,3,0,2
+
+DATA $13,$31,$00,$22           '"P"                         - @$36
+'DATA 1,3,3,1,0,2
+
+DATA $33,$13,$00,$22           '"Q"                         - @$3A
+'DATA 3,3,1,3,0,2
+
+DATA $13,$10,$22               '"R"                         - @$3E
+'DATA 1,3,1,0,2
+
+DATA $11,$10,$22               '"S"                         - @$41
+'DATA 1,1,1,0,2
+
+DATA $30,$22                   '"T"                         - @$44
+'DATA 3,0,2
+
+DATA $11,$30,$22               '"U"                         - @$46
+'DATA 1,1,3,0,2
+
+DATA $11,$13,$00,$22           '"V"                         - @$49
+'DATA 1,1,1,3,0,2
+
+DATA $13,$30,$22               '"W"                         - @$4D
+'DATA 1,3,3,0,2
+
+DATA $31,$13,$00,$22           '"X"                         - @$50
+'DATA 3,1,1,3,0,2
+
+DATA $31,$33,$00,$22           '"Y"                         - @$54
+'DATA 3,1,3,3,0,2
+
+DATA $33,$11,$00,$22           '"Z"                         - @$58
+'DATA 3,3,1,1,0,2
+
+DATA $33,$33,$30,$22           '"0"                         - @$5C
+'DATA 3,3,3,3,3,0,2
+
+DATA $13,$33,$30,$22           '"1"                         - @$60
+'DATA 1,3,3,3,3,0,2
+
+DATA $11,$33,$30,$22           '"2"                         - @$64
+'DATA 1,1,3,3,3,0,2
+
+DATA $11,$13,$30,$22           '"3"                         - @$68
+'DATA 1,1,1,3,3,0,2
+
+DATA $11,$11,$30,$22           '"4"                         - @$6C
+'DATA 1,1,1,1,3,0,2
+
+DATA $11,$11,$10,$22           '"5"                         - @$70
+'DATA 1,1,1,1,1,0,2
+
+DATA $31,$11,$10,$22           '"6"                         - @$74
+'DATA 3,1,1,1,1,0,2
+
+DATA $33,$11,$10,$22           '"7"                         - @$78
+'DATA 3,3,1,1,1,0,2
+
+DATA $33,$31,$10,$22           '"8"                         - @$7C
+'DATA 3,3,3,1,1,0,2
+
+DATA $33,$33,$10,$22           '"9"                         - @$80
+'DATA 3,3,3,3,1,0,2
+
+DATA $13,$13,$13,$00,$22       '<period>                    - @$84
+'DATA 1,3,1,3,1,3,0,2
+
+DATA $33,$11,$33,$00,$22       '<comma>                     - @$89
+'DATA 3,3,1,1,3,3,0,2
+
+DATA $33,$31,$11,$00,$22       '<colon>                     - @$8E
+'DATA 3,3,3,1,1,1,0,2
+
+DATA $11,$33,$11,$00,$22       '<question mark>             - @$93
+'DATA 1,1,3,3,1,1,0,2
+
+DATA $13,$33,$31,$00,$22       '<apostrophe>                - @$98
+'DATA 1,3,3,3,3,1,0,2
+
+DATA $31,$11,$13,$00,$22       '<hyphen>                    - @$9D
+'DATA 3,1,1,1,1,3,0,2
+
+DATA $31,$13,$10,$22           '<forward slash>             - @$A2
+'DATA 3,1,1,3,1,0,2
+
+DATA $31,$33,$13,$00,$22       '<brackets or parantheses>   - @$A6
+'DATA 3,1,3,3,1,3,0,2
+
+DATA $13,$11,$31,$00,$22       '<Quotation Marks>           - @$AB
+'DATA 1,3,1,1,3,1,0,2
+
+DATA $13,$31,$31,$00,$22       '"@"                         - @$B0
+'DATA 1,3,3,1,3,1,0,2
+
+DATA $13,$13,$10,$22           '"AR" [End of message]       - @$B5
+'DATA 1,3,1,3,1,0,2
+
+DATA $13,$11,$10,$22           '"AS" [Wait]                 - @$B9
+'DATA 1,3,1,1,1,0,2
+
+DATA $31,$11,$30,$22           '"BT" [Break text]           - @$BD
+'DATA 3,1,1,1,3,0,2
+
+DATA $11,$13,$13,$00,$22       '"SK"  [End of transmission] - @$C1
+'DATA 1,1,1,3,1,3,0,2
+
+DATA $31,$31,$13,$11,$00,$22   '"CL"  [Closing station]     - @$C6
+'DATA 3,1,3,1,1,3,1,1,0,2
+
+'* * * * * * * * * * * * * *
+'* Initialization  routine *
+'* * * * * * * * * * * * * *
+
+  duty = minimum                       'Initialize duty variable to minimum value.
+  rests = 0                            'Frankenstein has not rested yet.
+  GOSUB test_all_lamps                 'Turn on all lamps one by one.
+  GOSUB test_servo_range_of_motion     'Test servo operation.
+  GOSUB test_steering                  'Test steering motors.
+  GOSUB test_drive_motors              'Test drive motors.
+  GOSUB retrieve_logged_data           'Send any logged data to ANSI serial terminal then clear the data if requested by
+                                       'the boss.
+
+                                       'Say "v 2.5 HELLO "
+  i = $49                              '"V"
+  GOSUB talk_to_boss
+  i = $00                              '<space>
+  GOSUB talk_to_boss
+  i = $64                              '"2"
+  GOSUB talk_to_boss
+  i = $84                              '<period>
+  GOSUB talk_to_boss
+  i = $70                              '"5"
+  GOSUB talk_to_boss
+  i = $00                              '<space>
+  GOSUB talk_to_boss
+  i = $1B                              '"H"
+  GOSUB talk_to_boss
+  i = $12                              '"E"
+  GOSUB talk_to_boss
+  i = $29                              '"L"
+  GOSUB talk_to_boss
+  i = $29                              '"L"
+  GOSUB talk_to_boss
+  i = $33                              '"O"
+  GOSUB talk_to_boss
+  i = $00                              '<space>
+  GOSUB talk_to_boss
+
+'* * * * * * * * * * * * * * * * * *
+'* Main Program - General Behavior *
+'* * * * * * * * * * * * * * * * * *
+
+  DO                                           'Perform this loop forever.
+    GOSUB check_batteries                      'This is a high priority self-preservation subroutine. What should
+                                               'Frankenstein do when the batteries get low?
+
+    GOSUB what_is_the_temp                     'This is a high priority self-preservation subroutine. What should
+                                               'Frankenstein do when it gets too hot?
+                                               'Read the temperature sensor.
+                                               'IF Temperature > High_Temp THEN
+                                                   'Spell "TOO HOT " and tell the boss what is wrong.
+                                                   'find_shade_subroutines in the upcoming general behaviors
+                                               'ELSE
+                                                   'find_light_subroutines in the upcoming general behaviors
+
+    GOSUB Light_Shade_Info                     'Obtain ambient lighting information.
+
+'    GOSUB any_cmds_from_on_high                'Is the boss pointing an IR remote control at me?
+
+    GOSUB operate_servo                        'IF Temperature > High_Temp THEN
+                                               '     Point the eyes toward the dimmest light.
+                                               'ELSE
+                                               '     Point the eyes toward the brightest light.
+
+    GOSUB pointa2pointb                        'IF Temperature > High_Temp THEN
+                                               '     Steer toward the shade until servo is centered.
+                                               'ELSE
+                                               '     Steer toward the light until servo is centered.
+
+                                               'If it is "dark" then sit still and wait for a light source. Steer toward
+                                               'the light until servo is centered. Keep the servo centered while you
+                                               'drive toward the light source.
+
+'        GOSUB what_is_behind_me                'Am I backing into anything?
+
+  LOOP                                         'Do this all over again.
+
+conserve_power:                                'If the batteries get low, do this until the boss resets Frankenstein.
+OUTS = 0                                       'TURN EVERYTHING OFF NOW!
+END                                            'Low Power Mode
+
+'* * * * * * * *
+'* Subroutines *
+'* * * * * * * *
+
+check_batteries:
+
+'IF 9V battery is low THEN
+    'Tell_the_boss "9V BATT LOW"
+    'Keep CPU alive at all costs!
+    'GOTO conserve_power immediately! Battery needs to be recharged by the boss.
+'ENDIF
+'DO WHILE 6V battery is low
+    'Tell_the_boss "6V BATT LOW"
+    'IF rests > 5 THEN
+        'GOTO conserve_power. Battery needs to be recharged by the boss.
+    'ELSE
+        'rests = rests + 1
+        'PAUSE 60000 milliseconds and let the battery recover for a minute.
+    'ENDIF
+'LOOP
+'RETURN from this subroutine.
+
+'   PWM Compare_this_voltage, to_the_9V_battery, 17         'Charge the PWM RC network with the
+                                                            'reference voltage for 17ms.
+'   IF Battery_9V = NOT_OK THEN                             'Is the 9-Volt battery low?
+                                                            'Spell "9V BATT LOW " and tell the boss what is wrong.
+'       i = $80                                             '"9"
+'       GOSUB talk_to_boss
+'       i = $49                                             '"V"
+'       GOSUB talk_to_boss
+'       i = $00                                             '<space>
+'       GOSUB talk_to_boss
+'       i = $07                                             '"B"
+'       GOSUB talk_to_boss
+'       i = $04                                             '"A"
+'       GOSUB talk_to_boss
+'       i = $44                                             '"T"
+'       GOSUB talk_to_boss
+'       i = $44                                             '"T"
+'       GOSUB talk_to_boss
+'       i = $00                                             '<space>
+'       GOSUB talk_to_boss
+'       i = $29                                             '"L"
+'       GOSUB talk_to_boss
+'       i = $33                                             '"O"
+'       GOSUB talk_to_boss
+'       i = $4D                                             '"W"
+'       GOSUB talk_to_boss
+'       i = $00                                             '<space>
+'       GOSUB talk_to_boss
+'       GOTO conserve_power                                 'Shut everything off now!
+'   ENDIF
+
+    PWM Compare_this_voltage, to_the_6V_battery, 17        'Charge the PWM RC network with the
+                                                           'reference voltage for 17ms.
+    DO WHILE Battery_6V = NOT_OK                           'Is the 6-Volt battery low?
+                                                           'Spell "6V BATT LOW " and tell the boss what is wrong.
+       i = $74                                             '"6"
+       GOSUB talk_to_boss
+       i = $49                                             '"V"
+       GOSUB talk_to_boss
+       i = $00                                             '<space>
+       GOSUB talk_to_boss
+       i = $07                                             '"B"
+       GOSUB talk_to_boss
+       i = $04                                             '"A"
+       GOSUB talk_to_boss
+       i = $44                                             '"T"
+       GOSUB talk_to_boss
+       i = $44                                             '"T"
+       GOSUB talk_to_boss
+       i = $00                                             '<space>
+       GOSUB talk_to_boss
+       i = $29                                             '"L"
+       GOSUB talk_to_boss
+       i = $33                                             '"O"
+       GOSUB talk_to_boss
+       i = $4D                                             '"W"
+       GOSUB talk_to_boss
+       i = $00                                             '<space>
+       GOSUB talk_to_boss
+
+       IF rests > max_rests THEN  'If the battery has not recovered after 5 rest periods, GOTO conserve_power mode.
+          GOTO conserve_power
+       ELSE
+          rests = rests + 1       '...otherwise count another rest period and PAUSE 60000
+          PAUSE 60000             'milliseconds to let the battery recover for a minute.
+       ENDIF
+
+    LOOP
+
+RETURN
+
+what_is_the_temp:
+
+    HIGH TemperatureNerve                    'Apply +5 volts (HIGH) to charge the capacitor on the heat sensor.
+
+    PAUSE 1                                  'Charge the capacitor for at least 1 millisecond for a full +5V charge.
+                                             '220 ohms (in the port lines) * 0.01uF = 2.2uS = 1 RC time constant
+                                             '2.2uS * 5 time constants (for full charge) = 11 microseconds.
+                                             '11uS + 20% (for tolerances) = 13.2uS.
+
+    RCTIME TemperatureNerve, 1, Temperature  'Allow the Temperature capacitor to discharge and store the discharge time.
+
+'Uncomment these commands if a calibrated conversion table for degrees Fahrenheit is needed in the future.
+'The LOOKDOWN command needs the data points changed to reflect 16 bit time measurements. They are currently reflecting
+'calculated sensor resistance in x10Kohms, i.e. 199 = 19.9 Kohms.
+
+'    LOOKDOWN Thermistor, > [199, 195, 189, 181, 177, 173, 171, 165, 164, 159, 157, 155, 153, 137, 127, 123, 121, 113, 91, 89, 87, 85, 83, 81, 73, 71], Temperature
+'    LOOKUP Temperature, [54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 75, 76, 77, 80, 86, 98, 100, 102, 103, 104, 106, 108, 110], Temperature
+
+'Temperature in degrees Fahrenheit would be more efficient to log in EEPROM (8-bits) than a 16-bit time measurement.
+
+    IF Temperature > High_Temp THEN
+                                            'Spell "TOO HOT " and tell the boss what is wrong.
+       i = $44                              '"T"
+       GOSUB talk_to_boss
+       i = $33                              '"O"
+       GOSUB talk_to_boss
+       i = $33                              '"O"
+       GOSUB talk_to_boss
+       i = $00                              '<space>
+       GOSUB talk_to_boss
+       i = $18                              '"H"
+       GOSUB talk_to_boss
+       i = $33                              '"O"
+       GOSUB talk_to_boss
+       i = $44                              '"T"
+       GOSUB talk_to_boss
+       i = $00                              '<space>
+       GOSUB talk_to_boss
+    ENDIF
+
+    'DEBUG "Temperature =", DEC Temperature, CR
+
+RETURN
+
+what_is_behind_me:
+
+    HIGH IR_Flood_Lamp                       'Turn on the IR Flood Lamp.
+    HIGH Rear_Photo_Bumper                   'Apply +5 volts to charge the capacitor for the rear obstacle detector
+    PAUSE 1                                  'for 1 millisecond.
+
+    RCTIME Rear_Photo_Bumper, 1, IR_Bumper   'Allow the capacitor to discharge and store the discharge time.
+                                             'The IR_Bumper variable will be used in obstacle avoidance algorithms.
+    LOW IR_Flood_Lamp                        'Turn off the IR Flood Lamp (save the 6V battery).
+    'DEBUG "IR_Bumper =", DEC IR_Bumper, CR
+
+RETURN
+
+any_cmds_from_on_high:
+
+    IF IR_RC_Receiver = present THEN          'If Frankenstein detects an IR Remote Control signal then...
+       HIGH White_Light                       '   "I see it!"
+    ELSE
+       LOW White_Light                        '   "I don't see it."
+    ENDIF
+
+RETURN
+
+'-----[ Subroutine - Light_Shade_Info ]---------------------------------------
+' Uses tLeftEye and tRightEye (RCTIME measurements) and pwm var to calculate:
+' o light - Ambient light level on a scale of 0 to 324
+
+Light_Shade_Info:
+
+  GOSUB Light_Sensors                                          ' Get raw RC light measurements
+
+  sumdiff = (tLeftEye + tRightEye) MAX 65535                   ' Start light level with sum
+  IF duty <= 70 THEN light = duty - (sumdiff/905) MIN 1        ' If duty at min, find how much darker
+
+  IF sumdiff = 0 THEN                                          ' If timeout, max darkness
+     light = 0
+
+  ELSEIF duty = 255 THEN                                       ' If duty at max
+         light = duty + ((1800 - sumdiff) / 26)                ' Find how much brighter
+
+  ELSE                                                         ' If duty in range
+         light = duty                                          ' light = duty
+
+  ENDIF                                                        ' Done with light level
+
+  GOSUB Duty_Auto_Adjust                                       ' Adjust PWM duty for next loop
+    n = tLeftEye                                               ' Set up equation tLeftEye/(tLeftEye+tRightEye)
+    d = tLeftEye + tRightEye
+
+  GOSUB Fraction_Thousandths                                   ' Divide (returns thousandths)
+
+RETURN
+
+'-----[ Subroutine - Light_Sensors ]------------------------------------------
+' Measure P15 and P14 light sensor circuits. Duty variable must be in 70...255.
+' Stores results in tLeftEye and tRightEye.
+
+Light_Sensors:
+
+  PWM LeftOpticNerve, duty, 1                ' Charge cap in P15 circuit
+  RCTIME LeftOpticNerve, 1, tLeftEye         ' Measure P15 decay
+
+  PWM RightOpticNerve, duty, 1               ' Charge cap in P14 circuit
+  RCTIME RightOpticNerve, 1, tRightEye       ' Measure P14 decay
+
+RETURN
+
+'-----[ Subroutine - Duty_Auto_Adjust ]---------------------------------------
+' Adjust duty variable to keep tLeftEye + tRightEye in the 1800 to 2200 range.
+' Requires sumdiff word variable for calculations.
+
+Duty_Auto_Adjust:
+
+  sumDiff = (tLeftEye + tRightEye) MAX 4000      ' Limit max ambient value
+
+  IF sumDiff = 0 THEN sumDiff = 4000             ' If 0 (timeout) then 4000
+
+  IF (sumDiff <= 1800) OR (sumDiff >= 2200) THEN          ' If outside 1800 to 2200
+      sumDiff = 2000 - sumDiff                            ' Find excursion from target value
+      sumDiff = ABS(sumDiff) / 10                         ' Max sumDiff will be +/- 10
+      sumDiff = sumDiff MAX ((duty-68)/2)                 ' Reduce adjustment increments
+      sumDiff = sumDiff MAX ((257-duty)/2)                ' near ends of the range
+      IF sumDiff.BIT15 = NEGATIVE THEN sumDiff = -sumDiff ' Restore sign
+      duty = duty + sumDiff MIN 70 MAX 255                ' Limit duty to 70 to 255
+  ENDIF                                                   ' End of if outside 1800 to 2200
+
+RETURN
+
+'-----[ Subroutine - Fraction_Thousandths ]-----------------------------------
+' Calculate q = n/d as a number of thousandths.
+' n and d should be unsigned and n < d. Requires Nib size temp & i variables.
+
+Fraction_Thousandths:
+
+  q = 0                                      ' Clear quotient
+  IF n > 6500 THEN                           ' If n > 6500
+     temp = n / 6500                         ' scale n into 0..6500
+     n = n / temp
+     d = d / temp                            ' scale d with n
+  ENDIF
+
+  FOR i = 0 TO 3                             ' Long division ten thousandths
+      n = n // d * 10                        ' Multiply remainder by 10
+      q = q * 10 + (n/d)                     ' Add next digit to quotient
+  NEXT
+
+  IF q // 10 >= 5 THEN                       ' Round q to nearest thousandth
+     q = q / 10 + 1
+  ELSE
+     q = q / 10
+  ENDIF
+
+RETURN
+
+operate_servo:
+
+'Use the servo's pointer to track a light source
+
+' IF Temperature > High_Temp THEN                   'It is still too hot.
+'    GOTO Search_for_shade:
+' ELSE
+'    GOTO Search_for_brightest_light:
+' ENDIF
+
+Search_for_brightest_light:
+
+    PULSOUT Muscle_Nerve, (full_left - q) MIN full_right MAX full_left
+    PAUSE 1
+    LOW Red_LASER                                                           'Turn off Red_LASER
+    IF ABS ((full_left - q) - centered) < near_center THEN HIGH Red_LASER   'Activate Red_LASER only if pointer near
+                                                                            'center
+
+RETURN
+
+Search_for_shade:
+
+RETURN  'This also ends the operate_servo subroutine.
+
+test_all_lamps:
+
+  HIGH IR_Flood_Lamp
+  PAUSE 500
+  LOW IR_Flood_Lamp
+  HIGH White_Light
+  PAUSE 500
+  LOW White_Light
+  HIGH Red_LASER
+  PAUSE 500
+  LOW Red_LASER
+
+RETURN
+
+test_servo_range_of_motion:
+
+  FOR q = full_left TO full_right
+    PULSOUT Muscle_Nerve, q
+    PAUSE 1
+  NEXT
+
+  FOR q = full_right TO full_left
+    PULSOUT Muscle_Nerve, q
+    PAUSE 1
+  NEXT
+
+  q = centered
+  FOR temp = 0 TO 15
+    PULSOUT Muscle_Nerve, q          'Center the head after the test.
+    PAUSE 100
+  NEXT
+
+RETURN
+
+talk_to_boss:
+
+  DO
+     READ i, duty                                         'Read the duration codes for the character element from EEPROM.
+     i = i + 1                                            'Increment the message pointer.
+
+     ON duty.HIGHNIB GOSUB spaces, ditdahs, eom, ditdahs  'Pick the appropriate subroutine.
+
+                                                          'Attempt to compress the Morse Code data further by utilizing
+'Do the bit-shifting here...                              'the unused upper two bits of each nibble.  There is a bit-
+                                                          '-shifting mathematical expression [>>] that should work.
+                                                          'Concentrate processing on the LOWNIBBLE and shift the bits to
+                                                          'the right two spaces for further processing until ready to
+                                                          'retrieve more data from the EEPROM. For more information, read
+                                                          'pages 117 and 118 in the "BASIC Stamp Syntax and Reference
+                                                          'Manual, Version 2.2"
+
+                                                          'This could be taken a step further by rolling the bits past
+                                                          'the LSB and testing the LSB. However, I believe this could
+                                                          'cause timing problems.
+
+     ON duty.LOWNIB GOSUB spaces, ditdahs, eom, ditdahs   'Pick the appropriate subroutine.
+
+'...and do the bit-shifting here?
+
+  LOOP UNTIL duty = $22                                   'Perform loop until End_of_Message flag (duty = $22).
+
+RETURN
+
+spaces:
+
+  PAUSE wpm
+
+RETURN
+
+ditdahs:
+
+  FREQOUT Voicebox, (wpm * duty.HIGHNIB), tone            'Generate a tone for [wpm * duty.NIBBLE] milliseconds.
+  PAUSE wpm                                               'Turn off the tone for [wpm milliseconds].
+  IF duty.LOWNIB = 0  OR duty.LOWNIB = 2 THEN             'If the data in the LOWNIBBLE is a space or a EOM then return
+       GOTO eom                                           'from this subroutine for appropriate processing.
+  ELSE
+       FREQOUT Voicebox, (wpm * duty.LOWNIB), tone        'Generate a tone for [wpm * duty.NIBBLE milliseconds].
+       duty.LOWNIB = 0 'Clear the data in the LOW.NIBBLE. 'This will make Frankenstein generate a PAUSE and process the
+  ENDIF                                                   'data in the next EEPROM memory location when he returns from
+                                                          'this subroutine.
+eom:
+RETURN
+
+log_data:
+
+'This subroutine will store raw sensor data (i.e. ambient temperature) every ?? minutes in EEPROM for later retrieval.
+'PAUSE 60000 (approximately 60000 milliseconds) will store data once per minute.
+'Raw sensor data are 16-bit "words", so calculate available memory carefully. Current memory usage is as follows:
+
+'($7FF - $370[last program token]) + $0CF (last Morse Code EEPROM location) = (used memory bytes)
+'(       Program memory          ) +              Morse Code DATA           = [$55E] = 1374
+
+'2048 - 1347 = 674 bytes available / 2 = (337 sensor data storage locations)
+
+'Storing a [16-bit] data point every minute will fill the memory in 5 hours.
+'Storing a [8-bit] data point every minute will fill the memory in 10 hours.
+
+'Perform an alarm routine when memory is full. Spell "MEM FULL ".
+'Or simply END [low power mode].
+
+'Isolate the block of memory with a DATA statement.
+'Clear the block of memory with a DATA statement [ALLZEROS].
+'Write the stored sensor data into the next memory location. See page 460-463 of the "BASIC Stamp Syntax and Reference
+'Manual, Version 2.2" for details.
+
+RETURN
+
+retrieve_logged_data:
+
+'This subroutine will retrieve the logged data from EEPROM and send it to the ANSI serial terminal.  You might want to
+'put this subroutine first in the Initialization Routine, so it will be performed when Frankenstein is reset.
+'Insert a memory test that skips this subroutine if data in these EEPROM memory locations = ZERO (nothing logged yet).
+
+RETURN
+
+test_steering:
+'August 21, 2012 9:00pm --- Frankenstein's drive motor test and steering motor test -------------------------------------
+
+'I elevated the Drive wheels to allow them to spin freely.  I left the Steering wheels on the ground.  The Steering Motor
+'operated normally...
+
+  action = left_turn
+  OUTL.LOWNIB = action         'Steer Left for 1/4 second.
+  PAUSE 250
+  action = right_turn
+  OUTL.LOWNIB = action         'Steer Right for 1/4 second.
+  PAUSE 250
+  action = sit_still
+  OUTL.LOWNIB = action         'Turn off the motors.
+
+RETURN
+
+test_drive_motors:
+
+'...but the Drive Motor did not work.  Frankenstein complained about a low battery.  Hopefully, that has something to do
+'with it.  The 6V battery was being loaded down to about 3 volts during the steering test.  The batteries are now in the
+'charger.
+
+'August 22, 2012 --- After recharging the batteries, I obtained the same results with the drive motor test.
+'Frankenstein's drive motor bridge may require surgery, or I misinterpreted the wiring.
+
+  action = full_speed_ahead
+  OUTL.LOWNIB = action           'Drive Fwd/Rvs for one second.
+  PAUSE 1000
+  action = back_up_full_speed
+  OUTL.LOWNIB = action           'Drive the other way for one second.
+  PAUSE 1000
+  action = sit_still
+  OUTL.LOWNIB = action           'Turn off the motors.
+
+pointa2pointb:
+'-----------------------------------------------------------------------------------------------------------------------
+
+'Select a behavior based on ambient temperature.
+
+  IF Temperature > High_Temp THEN                   'It is still too hot.
+     GOTO Drive_toward_shade:
+  ELSE
+     GOTO Drive_toward_brightest_light:
+  ENDIF
+
+Drive_toward_brightest_light:
+  IF light > dark THEN GOTO wait_for_light         'Compare light to dark
+'
+  IF q < (centered - near_center) THEN              'Is servo looking to the right?
+     action = right_turn
+  ELSEIF q > (centered + near_center) THEN          'Is servo is looking to the left?
+     action = left_turn
+  ELSE
+     action = straight
+  ENDIF
+     OUTL.LOWNIB = action
+     PWM Drive_Fwd, at_this_speed, for_this_long    'Move toward the light
+
+RETURN
+
+'-------------------------------------------------------------------------------------------
+'      action = action + drive_forward               'Full speed ahead + steering action...
+'-------------------------------------------------------------------------------------------
+'                                        ...or...
+'-------------------------------------------------------------------------------------------
+'      PWM Drive_Fwd, at_this_speed, for_this long   '...use PWM on the Drive_Fwd PIN[3] to control the forward speed.
+'-------------------------------------------------------------------------------------------
+'      OUTL.LOWNIB = action                          '
+
+wait_for_light:
+      DEBUG "light = ", DEC5 light, CR
+      action = sit_still
+      OUTL.LOWNIB = action      'Switch off all motors to sit still while it is dark.
+
+RETURN
+
+Drive_toward_shade:                                  'if "TOO HOT"
+
+    END
