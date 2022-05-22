@@ -1,11 +1,13 @@
-from gpiozero import DigitalInputDevice
+from gpiozero import Button
+#from gpiozero import DigitalInputDevice
 from gpiozero import RGBLED
 from gpiozero import TonalBuzzer
 from gpiozero.tones import Tone
 from time import sleep
 import random
 #
-quiet = DigitalInputDevice(12,pull_up=True)
+quiet = Button(12,pull_up=True)
+#quiet = DigitalInputDevice(12,pull_up=True)
 #
 bzr = TonalBuzzer(16)
 #
@@ -31,7 +33,8 @@ while True:
     maxgrn = random.random()
     maxblu = random.random()
     print(f"r={maxred}|g={maxgrn}|b={maxblu}")
-    if not quiet.value:
+    if not quiet.is_pressed:
+#    if not quiet.value:
         beepbeep()
     led.pulse(fade_in_time=2,fade_out_time=2,on_color=(maxred,maxgrn,maxblu),n=1,background=False)
 #
