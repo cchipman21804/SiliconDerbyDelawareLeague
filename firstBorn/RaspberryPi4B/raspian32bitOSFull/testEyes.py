@@ -48,6 +48,6 @@ while True:
     lightUnit = units.get('left_eye')
     occ = values.get('occupancy')
 #
-    print(f"| Temp: {temp} {tempUnit} | Left:{leftEye}{lightUnit} | Center:{centerEye}{lightUnit} | Right:{rightEye}{lightUnit} | Occupied:{occ} |")
+    print(f"| Temp: {temp} {tempUnit} | Left: {leftEye}{lightUnit} | Center: {centerEye}{lightUnit} | Right: {rightEye}{lightUnit} | Occupied: {occ} |")
     sleep(5)
 #
