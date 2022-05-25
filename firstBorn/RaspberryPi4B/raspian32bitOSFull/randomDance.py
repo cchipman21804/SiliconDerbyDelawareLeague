@@ -139,4 +139,4 @@ while True:
         sleep(1)
     else:
         print("ERROR")
-    print("\n ******************** STARTING OVER ******************** \n")
+#    print("\n ******************** STARTING OVER ******************** \n")
