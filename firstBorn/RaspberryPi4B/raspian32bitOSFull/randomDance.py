@@ -1,9 +1,11 @@
 from gpiozero import Motor
 # https://gpiozero.readthedocs.io/en/stable/api_output.html#motor
 #
+import random
 from time import sleep
 #
-# This Python script will test the H-bridge and any connected DC motors
+# This Python script will perform a random dance by sending
+# random commands to the H-bridge and any connected DC motors
 #
 # specify H-Bridge control pins
 fwdL = 5 #23
@@ -74,55 +76,67 @@ def ccwSpin(vl,vr):
 # Test the motors & H-Bridge
 # Run various control tests until poweroff
 while True:
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("STRAIGHT FORWARD")
-    straightFwd(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("STRAIGHT REVERSE")
-    straightRev(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("FORWARD LEFT")
-    fwdLeft(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("FORWARD RIGHT")
-    fwdRight(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("REVERSE LEFT")
-    revLeft(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("REVERSE RIGHT")
-    revRight(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("CW SPIN")
-    cwSpin(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
-    print("CCW SPIN")
-    ccwSpin(lSpd,rSpd)
-    sleep(1)
-    stop()
-    print("STOPPED")
-    sleep(1)
+    move = random.randint(0,8)
+    if move == 0:
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 1:
+        print("STRAIGHT FORWARD")
+        straightFwd(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 2:
+        print("STRAIGHT REVERSE")
+        straightRev(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 3:
+        print("FORWARD LEFT")
+        fwdLeft(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 4:
+        print("FORWARD RIGHT")
+        fwdRight(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 5:
+        print("REVERSE LEFT")
+        revLeft(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 6:
+        print("REVERSE RIGHT")
+        revRight(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 7:
+        print("CW SPIN")
+        cwSpin(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    elif move == 8:
+        print("CCW SPIN")
+        ccwSpin(lSpd,rSpd)
+        sleep(1)
+        stop()
+        print("STOPPED")
+        sleep(1)
+    else:
+        print("ERROR")
     print("\n ******************** STARTING OVER ******************** \n")
