@@ -2,8 +2,9 @@
 # https://www.raspberrypi-spy.co.uk/2018/06/create-i2c-oled-display-slideshow-python/
 import time
 
-import Adafruit_GPIO.SPI as SPI
-import Adafruit_SSD1306
+#import Adafruit_GPIO.SPI as SPI
+#import Adafruit_SSD1306
+import Adafruit_SSD1315
 
 from PIL import Image
 from PIL import ImageDraw
