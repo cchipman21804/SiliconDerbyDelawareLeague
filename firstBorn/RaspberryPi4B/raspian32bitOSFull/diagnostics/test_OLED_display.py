@@ -6,6 +6,21 @@
 # Adafruit Blinka to support CircuitPython libraries. CircuitPython does
 # not support PIL/pillow (python imaging library)!
 
+# Before executing this script, follow these instructions:
+# https://learn.adafruit.com/adafruit-pioled-128x32-mini-oled-for-raspberry-pi/usage
+# "This guide assumes that you've gotten your Raspberry Pi up and running, and have CircuitPython installed."
+# "To install the library for the Pi OLED, enter the following into the terminal:"
+# sudo pip3 install adafruit-circuitpython-ssd1306
+
+# "We also need PIL to allow using text with custom fonts. There are several system libraries that PIL relies"
+# "on, so installing via a package manager is the easiest way to bring in everything:"
+# sudo apt-get install python3-pil
+
+# Enable I2C in raspi-config
+# Reboot the Raspberry Pi:
+# sudo reboot
+
+#
 import time
 import subprocess
 
@@ -13,7 +28,6 @@ from board import SCL, SDA
 import busio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
-
 
 # Create the I2C interface.
 i2c = busio.I2C(SCL, SDA)
@@ -47,7 +61,6 @@ bottom = height - padding
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
 
-
 # Load default font.
 font = ImageFont.load_default()
 
@@ -65,15 +78,18 @@ while True:
     # https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
     cmd = "hostname -I | cut -d' ' -f1"
     IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
+#
     cmd = 'cut -f 1 -d " " /proc/loadavg'
     CPU = subprocess.check_output(cmd, shell=True).decode("utf-8")
+#
     cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%s MB  %.2f%%\", $3,$2,$3*100/$2 }'"
     MemUsage = subprocess.check_output(cmd, shell=True).decode("utf-8")
+#
     cmd = 'df -h | awk \'$NF=="/"{printf "Disk: %d/%d GB  %s", $3,$2,$5}\''
     Disk = subprocess.check_output(cmd, shell=True).decode("utf-8")
+#
 
     # Write four lines of text.
-
     draw.text((x, top + 0), "IP: " + IP, font=font, fill=255)
     draw.text((x, top + 8), "CPU load: " + CPU, font=font, fill=255)
     draw.text((x, top + 16), MemUsage, font=font, fill=255)
