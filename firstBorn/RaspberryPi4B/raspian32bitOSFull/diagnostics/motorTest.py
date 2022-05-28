@@ -1,4 +1,4 @@
-from gpiozero import Motor
+from gpiozero import PhaseEnableMotor
 # https://gpiozero.readthedocs.io/en/stable/api_output.html#motor
 #
 from time import sleep
@@ -6,20 +6,18 @@ from time import sleep
 # This Python script will test the H-bridge and any connected DC motors
 #
 # specify H-Bridge control pins
-fwdL = 5 #23
-revL = 6 #24
-goL = None #13 # optional enable pin
-fwdR = 23 #5
-revR = 24 #6
-goR = None #25 # optional enable pin
+goL = 5 #23
+dirL = 6 #24
+goR = 23 #5
+dirR = 24 #6
 #
 # create Motor classes with independent control pins & enable speed control if desired
-motorLeft = Motor(fwdL,revL,None,pwm=True)
-motorRight = Motor(fwdR,revR,None,pwm=True)
+motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
+motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 # Define the motor speeds
-lSpd = 1
-rSpd = 1
+lSpd = 0.25
+rSpd = 0.25
 #
 # Define the directional control functions
 #
