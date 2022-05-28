@@ -1,4 +1,4 @@
-heatBeat.py ----- throbs an RGB LED an beeps a piezo element to indicate system activity
+heartBeat.py ----- throbs an RGB LED an beeps a piezo element to indicate system activity
 motorTest.py ---- cycles through each propulsion state
 randomDance.py -- performs random dance moves by sending random commands to the propulsion motors
 testBuzzer.py --- beeps a piezo element
