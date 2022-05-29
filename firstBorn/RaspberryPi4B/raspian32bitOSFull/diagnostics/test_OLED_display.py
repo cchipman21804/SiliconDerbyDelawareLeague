@@ -86,7 +86,7 @@ while True:
 #    MemUsage = subprocess.check_output(cmd, shell=True).decode("utf-8")
 #
 #
-    cmd = 'python3 ~/py/util/cputemp1.1.py'
+    cmd = 'python3 cputemp1.1.py'
     howHot = subprocess.check_output(cmd, shell=True).decode("utf-8")
 #
     cmd = 'df -h | awk \'$NF=="/"{printf "Disk: %d/%d GB  %s", $3,$2,$5}\''
