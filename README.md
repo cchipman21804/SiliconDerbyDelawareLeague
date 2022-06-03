@@ -15,6 +15,9 @@ https://www.silicondojo.com/
 |[913-2664 RASPBERRY PI CAMERA MODULE V2 $25.00 (OUT OF STOCK)](https://www.digikey.com/en/products/detail/raspberry-pi/913-2664/6152810 "913-2664 RASPBERRY PI CAMERA MODULE V2")||||
 |[IMX219-77 REPLACEMENT CAMERA MOD $9.90](https://www.digikey.com/en/products/detail/seeed-technology-co-ltd/114992267/12396961 "IMX219-77 REPLACEMENT CAMERA MOD")||||
 
-Adafruit Mini Pan-Tilt Kit https://www.adafruit.com/product/1967
+## Wish List:
+| Adafruit Mini Pan-Tilt Kit | https://www.adafruit.com/product/1967 |
+|:---------------------------|:--------------------------------------|
+| Adafruit Top Metal Plate for a Mini Robot Rover Chassis | https://www.adafruit.com/product/2944 |
 ## Estimated Shipping:
 ![image](https://user-images.githubusercontent.com/61033936/169675415-512c97c0-b51f-48d0-bc1a-4979f2afed27.png)
