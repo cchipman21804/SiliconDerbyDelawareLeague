@@ -1,4 +1,10 @@
 Explain it all here:
+This robot requires the installation of Apache2 web server, PHP interpreter, and associated libraries:
+"sudo apt install apache2 php libapache2-mod-php"
+
+The OLED display requires the installation of the Adafruit OLED Python module & PIL custom fonts libraries:
+"sudo pip3 install adafruit-circuitpython-ssd1306"
+"sudo apt-get install python3-pil"
 
 js ------------------- Javascript (script.js) to interpret keyboard commands for index-js.php (needs to be copied to /var/www/html)
 js/script.js --------- ties into the built-in accelerometer of the user's connected mobile device to accept directional & speed input
@@ -26,10 +32,3 @@ py/wifi-car.py ------- retrieves contents of txt/* and translates their contents
 txt ------------------ non-volatile storage for current command & current speed
 txt/command.txt ------ stores current directional command
 txt/speed.txt -------- stores current speed
-
-This robot requires the installation of Apache2 web server, PHP interpreter, and associated libraries:
-"sudo apt install apache2 php libapache2-mod-php"
-
-The OLED display requires the installation of the Adafruit OLED Python module & PIL custom fonts libraries:
-"sudo pip3 install adafruit-circuitpython-ssd1306"
-"sudo apt-get install python3-pil"
