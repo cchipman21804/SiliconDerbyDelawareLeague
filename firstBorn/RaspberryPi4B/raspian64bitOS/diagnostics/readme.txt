@@ -1,3 +1,5 @@
+The OLED display will not work because I2C is not available in this version of the operating system.
+
 heartBeat.py ---------- throbs an RGB LED an beeps a piezo element to indicate system activity
 motorTest.py ---------- cycles through each propulsion state
 randomDance.py -------- performs random dance moves by sending random commands to the propulsion motors
