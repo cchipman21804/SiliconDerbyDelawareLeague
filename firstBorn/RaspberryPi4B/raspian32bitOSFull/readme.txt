@@ -4,7 +4,7 @@ js ------------------- Javascript (script.js) to interpret keyboard commands for
 js/script.js --------- ties into the built-in accelerometer of the user's connected mobile device to accept directional & speed input
 
 php ------------------ PHP scripts for the Apache web server that need to be copied (via sudo cp) to /var/www/html
-                       For example: if using keyboard commands, mv index-js.php to /var/www/html/index.php
+                       For example: if using keyboard commands, copy index-js.php to /var/www/html/index.php
 php/controls.php ----- accepts directional input from the index-*.php for storage in txt/command.txt
 php/speed.php -------- accepts speed input from the index-*.php for storage in txt/speed.txt
 
