@@ -1,9 +1,8 @@
-<body bgcolor="000000" text="d0d0d0" link="ff0000">
-<h1>WiFi Car App Javascript</h1>
-
 <?php
 $ip = $_SERVER['SERVER_ADDR'];
 
+echo "<body bgcolor="000000" text="d0d0d0" link="ff0000">";
+echo "<h1>WiFi Car App Javascript</h1>";
 echo "<div style='width:640; height:480; margin-left:auto; margin-right:auto;'>";
 echo "<iframe src='http://".$ip.":8000' height=480 width=640></iframe>";
 echo "</div>";
