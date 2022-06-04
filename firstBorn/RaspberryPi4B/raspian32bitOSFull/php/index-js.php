@@ -1,3 +1,4 @@
+<body bgcolor="000000" text="d0d0d0" link="ff0000">
 <h1>WiFi Car App Javascript</h1>
 
 <?php
