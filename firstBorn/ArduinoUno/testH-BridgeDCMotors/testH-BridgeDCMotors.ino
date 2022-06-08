@@ -137,6 +137,7 @@ void revLeft() {
   digitalWrite(dirR,LOW);
   Serial.print("REVERSE LEFT\n");
   delay(1000);
+  
 }
 
 void revRight() {
@@ -145,6 +146,8 @@ void revRight() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,HIGH); // Set direction to reverse
   Serial.print("REVERSE RIGHT\n");
+  delay(1000);
+  
 }
 
 void cwSpin() {
