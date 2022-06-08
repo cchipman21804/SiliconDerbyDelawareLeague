@@ -41,27 +41,35 @@ void loop() {
       break;
     case 1:
       straightFwd();
+      STOP();
       break;
     case 2:
       straightRev();
+      STOP();
       break;
     case 3:
       fwdLeft();
+      STOP();
       break;
     case 4:
       fwdRight();
+      STOP();
       break;
     case 5:
       revLeft();
+      STOP();
       break;
     case 6:
       revRight();
+      STOP();
       break;
     case 7:
       cwSpin();
+      STOP();
       break;
     case 8:
       ccwSpin();
+      STOP();
       break;
     default:
       Serial.print("ERROR");
