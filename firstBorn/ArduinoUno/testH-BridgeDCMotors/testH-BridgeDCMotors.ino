@@ -6,204 +6,157 @@
  * 
  */
 
-const byte fwdL = 5; // analog output pins 5,6,10,11
-const byte revL = 6; // analog output pins 5,6,10,11
-const byte fwdR = 10; // analog output pins 5,6,10,11
-const byte revR = 11; // analog output pins 5,6,10,11
-const byte LED = 13; // on-board LED
+const byte spdL = 3; // analog output pins 3,5,6,9,10,11
+const byte dirL = 4; // analog output pins 3,5,6,9,10,11
+const byte spdR = 6; // analog output pins 3,5,6,9,10,11
+const byte dirR = 7; // analog output pins 3,5,6,9,10,11
+const byte LED = LED_BUILTIN;// 13; // on-board LED
+
+// Set motor speed (if using PWM)
+const float s = 1.0; // 1.0 = full speed
+const int spd = int(255 * s);
 
 void setup() {
   // put your setup code here, to run once:
   // comment out if using PWM
-  pinMode(fwdL,OUTPUT);
-  pinMode(revL,OUTPUT);
-  pinMode(fwdR,OUTPUT);
-  pinMode(revR,OUTPUT);
+  //pinMode(spdL,OUTPUT);
+  pinMode(dirL,OUTPUT);
+  //pinMode(spdR,OUTPUT);
+  pinMode(dirR,OUTPUT);
   pinMode(LED, OUTPUT);
   Serial.begin(9600);
+  randomSeed(analogRead(0)); // Get a random seed from noise on analog input 0
+  //STOP();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
-  Serial.print("STRAIGHT FORWARD\n");
-  straightFwd();
-  delay(1000);
-  STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
-  Serial.print("STRAIGHT REVERSE\n");
-  straightRev();
-  delay(1000);
-  STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
-  Serial.print("FORWARD LEFT\n");
-  fwdLeft();
-  delay(1000);
-  STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
-  Serial.print("FORWARD RIGHT\n");
-  fwdRight();
-  delay(1000);
-  STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
-  Serial.print("CW SPIN\n");
-  cwSpin();
-  delay(1000);
-  STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
-  Serial.print("CCW SPIN\n");
-  ccwSpin();
-  delay(1000);
-/*  
- *   Redundant code
- STOP();
-  heartBeat();
-  Serial.print("STOPPED\n");
-  delay(1000);
- *
- */
-  Serial.print("\n ******************** STARTING OVER ******************** \n");
+// Pick a random number & execute a corresponding function
+  //int randNum = random(9);
+  for (int randNum = 0; randNum < 9; randNum++) {
+  switch (randNum) {
+    case 0:
+      STOP();
+      break;
+    case 1:
+      straightFwd();
+      break;
+    case 2:
+      straightRev();
+      break;
+    case 3:
+      fwdLeft();
+      break;
+    case 4:
+      fwdRight();
+      break;
+    case 5:
+      revLeft();
+      break;
+    case 6:
+      revRight();
+      break;
+    case 7:
+      cwSpin();
+      break;
+    case 8:
+      ccwSpin();
+      break;
+    default:
+      Serial.print("ERROR");
+      break;
+  } // end switch-case
+  } // end for loop
+  //Serial.print("\n ******************** STARTING OVER ******************** \n");
 }
 
 void STOP() {
-// on/off version
-  digitalWrite(fwdL,LOW);
-  digitalWrite(fwdR,LOW);
-  digitalWrite(revL,LOW);
-  digitalWrite(revR,LOW);
-
-// PWM speed control version
-//  analogWrite(fwdL,0);
-//  analogWrite(fwdR,0);
-//  analogWrite(revL,0);
-//  analogWrite(revR,0);
+  analogWrite(spdL,0);    // Set speed of left motor to zero
+  digitalWrite(dirL,LOW);
+  analogWrite(spdR,0);    // Set speed of right motor to zero
+  digitalWrite(dirR,LOW);
+  heartBeat();
+  Serial.print("STOPPED\n");
+  delay(1000);
 
 }
 
 void straightFwd() {
-// on/off version
-  digitalWrite(fwdL,HIGH);
-  digitalWrite(fwdR,HIGH);
-  digitalWrite(revL,LOW);
-  digitalWrite(revR,LOW);
-
-// PWM speed control version
-//  analogWrite(fwdL,255);
-//  analogWrite(fwdR,255);
-//  analogWrite(revL,0);
-//  analogWrite(revR,0);
+  analogWrite(spdL,spd);
+  digitalWrite(dirL,LOW); // Set direction to forward
+  analogWrite(spdR,spd);
+  digitalWrite(dirR,LOW); // Set direction to forward
+  Serial.print("STRAIGHT FORWARD\n");
+  delay(1000);
   
 }
 
 void straightRev() {
-// on/off version
-  digitalWrite(fwdL,LOW);
-  digitalWrite(fwdR,LOW);
-  digitalWrite(revL,HIGH);
-  digitalWrite(revR,HIGH);
+  analogWrite(spdL,spd);
+  digitalWrite(dirL,HIGH); // Set direction to reverse
+  analogWrite(spdR,spd);
+  digitalWrite(dirR,HIGH); // Set direction to reverse
+  Serial.print("STRAIGHT REVERSE\n");
+  delay(1000);
 
-// PWM speed control version
-//  analogWrite(fwdL,0);
-//  analogWrite(fwdR,0);
-//  analogWrite(revL,255);
-//  analogWrite(revR,255);
-}
-
-void fwdLeft() {
-// on/off version
-  digitalWrite(fwdL,LOW);
-  digitalWrite(fwdR,HIGH);
-  digitalWrite(revL,LOW);
-  digitalWrite(revR,LOW);
-
-// PWM speed control version
-//  analogWrite(fwdL,0);
-//  analogWrite(fwdR,255);
-//  analogWrite(revL,0);
-//  analogWrite(revR,0);
 }
 
 void fwdRight() {
-// on/off version
-  digitalWrite(fwdL,HIGH);
-  digitalWrite(fwdR,LOW);
-  digitalWrite(revL,LOW);
-  digitalWrite(revR,LOW);
+  analogWrite(spdL,spd);
+  digitalWrite(dirL,LOW); // Set direction to forward
+  analogWrite(spdR,0);
+  digitalWrite(dirR,LOW);
+  Serial.print("FORWARD RIGHT\n");
+  delay(1000);
 
-// PWM speed control version
-//  analogWrite(fwdL,255);
-//  analogWrite(fwdR,0);
-//  analogWrite(revL,0);
-//  analogWrite(revR,0);
+}
+
+void fwdLeft() {
+  analogWrite(spdL,0);
+  digitalWrite(dirL,LOW);
+  analogWrite(spdR,spd);
+  digitalWrite(dirR,LOW); // Set direction to forward
+  Serial.print("FORWARD LEFT\n");
+  delay(1000);
+
 }
 
 void revLeft() {
-// on/off version
-  digitalWrite(fwdL,LOW);
-  digitalWrite(fwdR,LOW);
-  digitalWrite(revL,LOW);
-  digitalWrite(revR,HIGH);
-
-// PWM speed control version
-//  analogWrite(fwdL,0);
-//  analogWrite(fwdR,0);
-//  analogWrite(revL,0);
-//  analogWrite(revR,255);
+  analogWrite(spdL,spd);
+  digitalWrite(dirL,HIGH); // Set direction to reverse
+  analogWrite(spdR,0);
+  digitalWrite(dirR,LOW);
+  Serial.print("REVERSE LEFT\n");
+  delay(1000);
 }
 
 void revRight() {
-// on/off version
-  digitalWrite(fwdL,LOW);
-  digitalWrite(fwdR,LOW);
-  digitalWrite(revL,HIGH);
-  digitalWrite(revR,LOW);
-
-// PWM speed control version
-//  analogWrite(fwdL,0);
-//  analogWrite(fwdR,0);
-//  analogWrite(revL,255);
-//  analogWrite(revR,0);
+  analogWrite(spdL,0);
+  digitalWrite(dirL,LOW);
+  analogWrite(spdR,spd);
+  digitalWrite(dirR,HIGH); // Set direction to reverse
+  Serial.print("REVERSE RIGHT\n");
 }
 
 void cwSpin() {
-// on/off version
-  digitalWrite(fwdL,HIGH);
-  digitalWrite(fwdR,LOW);
-  digitalWrite(revL,LOW);
-  digitalWrite(revR,HIGH);
+  analogWrite(spdL,spd);
+  digitalWrite(dirL,LOW); // Set direction to forward
+  analogWrite(spdR,spd);
+  digitalWrite(dirR,HIGH); // Set direction to reverse
+  Serial.print("CW SPIN\n");
+  delay(1000);
 
-// PWM speed control version
-//  analogWrite(fwdL,255);
-//  analogWrite(fwdR,0);
-//  analogWrite(revL,0);
-//  analogWrite(revR,255);
 }
 
 void ccwSpin() {
-// on/off version
-  digitalWrite(fwdL,LOW);
-  digitalWrite(fwdR,HIGH);
-  digitalWrite(revL,HIGH);
-  digitalWrite(revR,LOW);
+  analogWrite(spdL,spd);
+  digitalWrite(dirL,HIGH); // Set direction to reverse
+  analogWrite(spdR,spd);
+  digitalWrite(dirR,LOW); // Set direction to forward
+  Serial.print("CCW SPIN\n");
+  delay(1000);
 
-// PWM speed control version
-//  analogWrite(fwdL,0);
-//  analogWrite(fwdR,255);
-//  analogWrite(revL,255);
-//  analogWrite(revR,0);
 }
 
 void heartBeat() {
