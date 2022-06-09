@@ -19,6 +19,9 @@ const int spd = int(255 * s);
 // Set time duration of motor command
 const int d = 2000; // in milliseconds
 
+// Set time duration of stop command
+const int scd = 250; // in milliseconds
+
 void setup() {
   // put your setup code here, to run once:
   // comment out if using PWM
@@ -34,7 +37,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  STOP();
+  //STOP(); // uncomment this line to execute STOP commands during a random walk
 // Pick a random number & execute a corresponding function
   //int randNum = random(9); // uncomment this line for a random walk
   for (int randNum = 0; randNum < 9; randNum++) { // comment out this for loop for a random walk
@@ -91,7 +94,7 @@ void STOP() {
   digitalWrite(dirR,LOW);
   heartBeat();
   Serial.print("STOPPED\n");
-  delay(d);
+  delay(scd);
 
 }
 
