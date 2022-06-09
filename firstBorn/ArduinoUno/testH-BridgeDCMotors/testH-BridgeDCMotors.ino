@@ -16,6 +16,9 @@ const byte LED = LED_BUILTIN;// 13; // on-board LED
 const float s = 1.0; // 1.0 = full speed
 const int spd = int(255 * s);
 
+// Set time duration of motor command
+const int d = 2000; // in milliseconds
+
 void setup() {
   // put your setup code here, to run once:
   // comment out if using PWM
@@ -33,8 +36,8 @@ void loop() {
   // put your main code here, to run repeatedly:
   STOP();
 // Pick a random number & execute a corresponding function
-  //int randNum = random(9);
-  for (int randNum = 0; randNum < 9; randNum++) {
+  //int randNum = random(9); // uncomment this line for a random walk
+  for (int randNum = 0; randNum < 9; randNum++) { // comment out this for loop for a random walk
   switch (randNum) {
     case 0:
       STOP();
@@ -75,7 +78,9 @@ void loop() {
       Serial.print("ERROR");
       break;
   } // end switch-case
-  } // end for loop
+  
+  } // end for loop -- comment out this for loop for a random walk
+  
   //Serial.print("\n ******************** STARTING OVER ******************** \n");
 }
 
@@ -86,7 +91,7 @@ void STOP() {
   digitalWrite(dirR,LOW);
   heartBeat();
   Serial.print("STOPPED\n");
-  delay(1000);
+  delay(d);
 
 }
 
@@ -96,7 +101,7 @@ void straightFwd() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,LOW); // Set direction to forward
   Serial.print("STRAIGHT FORWARD\n");
-  delay(1000);
+  delay(d);
   
 }
 
@@ -106,7 +111,7 @@ void straightRev() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,HIGH); // Set direction to reverse
   Serial.print("STRAIGHT REVERSE\n");
-  delay(1000);
+  delay(d);
 
 }
 
@@ -116,7 +121,7 @@ void fwdRight() {
   analogWrite(spdR,0);
   digitalWrite(dirR,LOW);
   Serial.print("FORWARD RIGHT\n");
-  delay(1000);
+  delay(d);
 
 }
 
@@ -126,7 +131,7 @@ void fwdLeft() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,LOW); // Set direction to forward
   Serial.print("FORWARD LEFT\n");
-  delay(1000);
+  delay(d);
 
 }
 
@@ -136,7 +141,7 @@ void revLeft() {
   analogWrite(spdR,0);
   digitalWrite(dirR,LOW);
   Serial.print("REVERSE LEFT\n");
-  delay(1000);
+  delay(d);
   
 }
 
@@ -146,7 +151,7 @@ void revRight() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,HIGH); // Set direction to reverse
   Serial.print("REVERSE RIGHT\n");
-  delay(1000);
+  delay(d);
   
 }
 
@@ -156,7 +161,7 @@ void cwSpin() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,HIGH); // Set direction to reverse
   Serial.print("CW SPIN\n");
-  delay(1000);
+  delay(d);
 
 }
 
@@ -166,7 +171,7 @@ void ccwSpin() {
   analogWrite(spdR,spd);
   digitalWrite(dirR,LOW); // Set direction to forward
   Serial.print("CCW SPIN\n");
-  delay(1000);
+  delay(d);
 
 }
 
