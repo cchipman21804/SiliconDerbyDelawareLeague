@@ -6,11 +6,14 @@ from gpiozero.tones import Tone
 from time import sleep
 import random
 #
+# specify mute button GPIO pin
 quiet = Button(12,pull_up=True)
 #quiet = DigitalInputDevice(12,pull_up=True)
 #
+# specify voicebox GPIO pin
 bzr = TonalBuzzer(16)
 #
+# specify (R,G,B) LED GPIO pins
 led = RGBLED(17,27,22)
 # LED(##) = GPIO ##
 #red = PWMLED(17)
