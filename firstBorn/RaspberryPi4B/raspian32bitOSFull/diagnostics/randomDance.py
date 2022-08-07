@@ -18,8 +18,10 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 # Define the motor speeds
-lSpd = 0.25
-rSpd = 0.25
+#lSpd = 0.25
+lSpd = 1.0
+#rSpd = 0.25
+rSpd = 1.0
 #
 # Define the directional control functions
 #

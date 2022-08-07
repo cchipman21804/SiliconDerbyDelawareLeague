@@ -8,18 +8,20 @@ from time import sleep
 pgmName = 'motorTest'
 #
 # specify H-Bridge control pins
-goL = 5 #23
-dirL = 6 #24
-goR = 23 #5
-dirR = 24 #6
+goL = 23 #23 or 5
+dirL = 24 #24 or 6
+goR = 5 #5 or 23
+dirR = 6 #6 or 24
 #
 # create Motor classes with independent control pins & enable speed control if desired
-motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
-motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
+motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
+motorRight = PhaseEnableMotor(dirR,goR,pwm=False)
 #
 # Define the motor speeds
-lSpd = 0.25
-rSpd = 0.25
+#lSpd = 1.0
+#lSpd = 0.25
+#rSpd = 1.0
+#rSpd = 0.25
 #
 # Define the directional control functions
 #
@@ -29,47 +31,47 @@ def stop():
     motorRight.stop()
 #
 # Specifying a value for v between 0 & 1 will control the motors' speed
-def straightFwd(vl,vr):
+def straightFwd():
     # Run both motors forward
-    motorLeft.forward(speed=vl) # 1 = Full Speed
-    motorRight.forward(speed=vr) # 1 = Full Speed
+    motorLeft.forward() # 1 = Full Speed
+    motorRight.forward() # 1 = Full Speed
 #
-def straightRev(vl,vr):
+def straightRev():
     # Run both motors in reverse
-    motorLeft.backward(speed=vl) # 1 = Full Speed
-    motorRight.backward(speed=vr) # 1 = Full Speed
+    motorLeft.backward() # 1 = Full Speed
+    motorRight.backward() # 1 = Full Speed
 #
-def fwdLeft(vl,vr):
+def fwdLeft():
     # Run right motor forward
-    motorLeft.forward(speed=0) # vl) # 0 = Stopped
-    motorRight.forward(speed=vr)
+    motorLeft.stop() # vl) # 0 = Stopped
+    motorRight.forward()
 #
-def fwdRight(vl,vr):
+def fwdRight():
     # Run left motor forward
-    motorLeft.forward(speed=vl)
-    motorRight.forward(speed=0) # vr) # 0 = Stopped
+    motorLeft.forward()
+    motorRight.stop() # vr) # 0 = Stopped
 #
-def revLeft(vl,vr):
+def revLeft():
     # Run right motor forward
-    motorLeft.backward(speed=0) # vl) # 0 = Stopped
-    motorRight.backward(speed=vr)
+    motorLeft.stop() # vl) # 0 = Stopped
+    motorRight.backward()
 #
-def revRight(vl,vr):
+def revRight():
     # Run left motor forward
-    motorLeft.backward(speed=vl)
-    motorRight.backward(speed=0) # vr) # 0 = Stopped
+    motorLeft.backward()
+    motorRight.stop() # vr) # 0 = Stopped
 #
-def cwSpin(vl,vr):
+def cwSpin():
     # Run left motor forward
     # Run right motor backward
-    motorLeft.forward(speed=vl)
-    motorRight.backward(speed=vr)
+    motorLeft.forward()
+    motorRight.backward()
 #
-def ccwSpin(vl,vr):
+def ccwSpin():
     # Run left motor forward
     # Run right motor backward
-    motorLeft.backward(speed=vl)
-    motorRight.forward(speed=vr)
+    motorLeft.backward()
+    motorRight.forward()
 #
 # Test the motors & H-Bridge
 # Run various control tests until poweroff
@@ -78,49 +80,49 @@ while True:
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> STRAIGHT FORWARD")
-    straightFwd(lSpd,rSpd)
+    straightFwd()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> STRAIGHT REVERSE")
-    straightRev(lSpd,rSpd)
+    straightRev()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> FORWARD LEFT")
-    fwdLeft(lSpd,rSpd)
+    fwdLeft()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> FORWARD RIGHT")
-    fwdRight(lSpd,rSpd)
+    fwdRight()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> REVERSE LEFT")
-    revLeft(lSpd,rSpd)
+    revLeft()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> REVERSE RIGHT")
-    revRight(lSpd,rSpd)
+    revRight()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> CW SPIN")
-    cwSpin(lSpd,rSpd)
+    cwSpin()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
     sleep(1)
     print(f"[{pgmName}]> CCW SPIN")
-    ccwSpin(lSpd,rSpd)
+    ccwSpin()
     sleep(1)
     stop()
     print(f"[{pgmName}]> STOPPED")
