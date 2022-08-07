@@ -6,7 +6,7 @@ from time import sleep
 # This uses the OutputDevice module to independently control motor direction and motor activation
 # PhaseEnableMotor module did not perform this function satisfactorily
 #
-pgmName = 'motorTest v1.1'
+pgmName = 'motorTest v0.1'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 5
