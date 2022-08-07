@@ -5,7 +5,7 @@ from gpiozero import OutputDevice
 # This uses the OutputDevice module to independently control motor direction and motor activation
 # PhaseEnableMotor module did not perform this function satisfactorily
 #
-pgmName = 'motorTest2'
+pgmName = 'motorTest v1.1'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 5
@@ -88,4 +88,58 @@ def ccwSpin():
     motorLeftSpd.on()   # on() = Full Speed, off() = Full Stop
     motorRightSpd.on()  # on() = Full Speed, off() = Full Stop
 #
-
+# Test the motors & H-Bridge
+# Run various control tests until poweroff
+while True:
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> STRAIGHT FORWARD")
+    straightFwd()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> STRAIGHT REVERSE")
+    straightRev()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> FORWARD LEFT")
+    fwdLeft()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> FORWARD RIGHT")
+    fwdRight()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> REVERSE LEFT")
+    revLeft()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> REVERSE RIGHT")
+    revRight()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> CW SPIN")
+    cwSpin()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> CCW SPIN")
+    ccwSpin()
+    sleep(1)
+    stop()
+    print(f"[{pgmName}]> STOPPED")
+    sleep(1)
+    print(f"[{pgmName}]> ******************** STARTING OVER ******************** ")
