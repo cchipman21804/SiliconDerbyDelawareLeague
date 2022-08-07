@@ -1,4 +1,5 @@
 from gpiozero import OutputDevice
+from time import sleep
 #
 # This Python script will test the H-bridge and any connected DC motors
 #
