@@ -7,7 +7,7 @@ from time import sleep
 #
 # This Python script will test the H-bridge and any connected DC motors
 #
-pgmName = 'motorTest'
+pgmName = 'motorTest v1.0'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 5
