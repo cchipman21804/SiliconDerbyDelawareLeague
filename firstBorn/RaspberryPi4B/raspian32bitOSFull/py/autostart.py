@@ -10,7 +10,7 @@ script = [
           'test_OLED_display.py',
          # 'video-stream.py',
          # 'heartBeat.py',
-          'motorTest.py'
+          'motorTest1.0.py'
          ]
 #
 # execute multiple Python scripts
