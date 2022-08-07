@@ -1,6 +1,8 @@
 from gpiozero import PhaseEnableMotor
 # https://gpiozero.readthedocs.io/en/stable/api_output.html#motor
 #
+# The PhaseEnableMotor module is not working as expected.  One motor works perfectly while reverse on the other motor is unresponsive.
+#
 from time import sleep
 #
 # This Python script will test the H-bridge and any connected DC motors
