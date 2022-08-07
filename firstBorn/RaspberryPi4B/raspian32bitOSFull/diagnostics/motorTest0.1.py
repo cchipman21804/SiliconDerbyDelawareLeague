@@ -4,7 +4,6 @@ from time import sleep
 # This Python script will test the H-bridge and any connected DC motors
 #
 # This uses the OutputDevice module to independently control motor direction and motor activation
-# PhaseEnableMotor module did not perform this function satisfactorily
 #
 pgmName = 'motorTest v0.1'
 #
