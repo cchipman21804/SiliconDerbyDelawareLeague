@@ -6,6 +6,9 @@ The OLED display requires the installation of the Adafruit OLED Python module & 
 "sudo pip3 install adafruit-circuitpython-ssd1306"
 "sudo apt-get install python3-pil"
 
+etc ------------------ required files for /etc folder
+etc/rc.local --------- Executes py/autostart.py upon bootup
+
 js ------------------- Javascript (script.js) to interpret keyboard commands for index-js.php (needs to be copied to /var/www/html)
 js/script.js --------- ties into the built-in accelerometer of the user's connected mobile device to accept directional & speed input
 
