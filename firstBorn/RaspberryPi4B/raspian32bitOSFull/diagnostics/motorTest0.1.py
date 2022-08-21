@@ -8,10 +8,10 @@ from time import sleep
 pgmName = 'motorTest v0.1'
 #
 # specify H-Bridge control pins
-goL = 23 #23 or 5
-dirL = 24 #24 or 6
-goR = 5 #5 or 23
-dirR = 6 #6 or 24
+goL = 17 #23 or 17
+dirL = 27 #24 or 27
+goR = 23 #17 or 23   # Pin 5 goes HIGH
+dirR = 24 #27 or 24  # Pin 6 goes HIGH
 #
 # create Motor classes with independent control pins & enable speed control if desired
 motorLeftSpd = OutputDevice(goL)

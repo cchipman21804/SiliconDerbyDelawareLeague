@@ -8,10 +8,10 @@ from time import sleep
 # random commands to the H-bridge and any connected DC motors
 #
 # specify H-Bridge control pins
-goL = 5 #23
-dirL = 6 #24
-goR = 23 #5
-dirR = 24 #6
+goL = 17 #23 or 17
+dirL = 27 #24 or 27
+goR = 23 #17 or 23   # Pin 5 goes HIGH
+dirR = 24 #27 or 24  # Pin 6 goes HIGH
 #
 # create Motor classes with independent control pins & enable speed control if desired
 motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
