@@ -8,10 +8,11 @@ pyfldr = 'py/'
 # specify Python scripts
 script = [
           'test_OLED_display.py',
-          'video-stream.py'
+          'video-stream.py',
          # 'motorsOff.py'
          # 'motorTest1.0.py'
+          'control_v1.0.py'
          ]
 #
 # execute multiple Python scripts
-os.system(f"python3 {rootfldr}{diagfldr}{script[0]} & python3 {rootfldr}{pyfldr}{script[1]}") # & python3 {rootfldr}{diagfldr}{script[2]}") # & python3 /var/www/html/wifi-car.py & python3 /var/www/html/system-status.py & python3 /var/www/html/tether.py")
+os.system(f"python3 {rootfldr}{diagfldr}{script[0]} & python3 {rootfldr}{pyfldr}{script[1]} & python3 {rootfldr}{pyfldr}{script[2]}") # & python3 /var/www/html/wifi-car.py & python3 /var/www/html/system-status.py & python3 /var/www/html/tether.py")
