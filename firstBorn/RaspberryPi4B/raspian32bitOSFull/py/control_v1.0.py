@@ -76,13 +76,13 @@ def rmb():
 # This Python script will send commands to the H-bridge and any connected DC motors
 # based on input from a PS4 controller
 #
-pgmname = 'control_v1.0'
+pgmName = 'control_v1.0'
 #
 # specify H-Bridge control pins
-goL = 17 #23 or 17
-dirL = 27 #24 or 27
-goR = 23 #17 or 23   # Pin 5 goes HIGH
-dirR = 24 #27 or 24  # Pin 6 goes HIGH
+goL = 23 #23 or 17
+dirL = 24 #24 or 27
+goR = 17 #17 or 23   # Pin 5 goes HIGH
+dirR = 27 #27 or 24  # Pin 6 goes HIGH
 #
 # create Motor classes with independent control pins & enable speed control if desired
 motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
@@ -94,31 +94,31 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_up_arrow_press(self):
-        print(f"[{pgmname}]> Left Motor Forward")
+        print(f"[{pgmName}]> Left Motor Forward")
         lmf()
 
     def on_triangle_press(self):
-        print(f"[{pgmname}]> Right Motor Forward")
+        print(f"[{pgmName}]> Right Motor Forward")
         rmf()
 
     def on_down_arrow_press(self):
-        print(f"[{pgmname}]> Left Motor Reverse")
+        print(f"[{pgmName}]> Left Motor Reverse")
         lmb()
 
     def on_x_press(self):
-        print(f"[{pgmname}]> Right Motor Reverse")
+        print(f"[{pgmName}]> Right Motor Reverse")
         rmb()
 
     def on_up_down_arrow_release(self):
-        print(f"[{pgmname}]> Left Motor Stop")
+        print(f"[{pgmName}]> Left Motor Stop")
         stop()
 
     def on_x_release(self):
-        print(f"[{pgmname}]> Right Motor Stop")
+        print(f"[{pgmName}]> Right Motor Stop")
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmname}]> Right Motor Stop")
+        print(f"[{pgmName}]> Right Motor Stop")
         stop()
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
