@@ -25,16 +25,16 @@ def main():
     p1 = Process(target=e, args=(cmdstr,))
     p1.start()
     
-    cmdstr = f"python3 {rootfldr}{pyfldr}{script[1]}"
-    p2 = Process(target=e, args=(cmdstr,))
-    p2.start()
+#    cmdstr = f"python3 {rootfldr}{pyfldr}{script[1]}"
+#    p2 = Process(target=e, args=(cmdstr,))
+#    p2.start()
     
 #    cmdstr = f"python3 {rootfldr}{pyfldr}{script[2]}"
 #    p3 = Process(target=control)
 #    p3.start()
     
     p1.join()
-    p2.join()
+#    p2.join()
 #    p3.join()
 #
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from gpiozero import PhaseEnableMotor
+from gpiozero import PhaseEnableMotor,Servo
 from pyPS4Controller.controller import Controller
 #
 # Define controller connection & disconnection routines
@@ -88,6 +88,10 @@ dirR = 27 #27 or 24  # Pin 6 goes HIGH
 motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=False)
 #
+# hard-coded values for min & max pulse width are suitable for the
+# Parallex Standard Servo (#900-00005) 180 degree movement
+servo = Servo(4,min_pulse_width=0.75/1000,max_pulse_width=2.25/1000)
+#
 class MyController(Controller):
 
     def __init__(self, **kwargs):
@@ -120,6 +124,21 @@ class MyController(Controller):
     def on_triangle_release(self):
         print(f"[{pgmName}]> Right Motor Stop")
         stop()
+
+#    def on_L3_x_at_rest(self):
+    def on_square_press(self):
+        servo.max()
+
+#    def on_L3_left(self):
+    def on_square_release(self):
+        servo.mid()
+
+    def on_circle_release(self):
+        servo.mid()
+
+#    def on_L3_right(self):
+    def on_circle_press(self):
+        servo.min()
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
