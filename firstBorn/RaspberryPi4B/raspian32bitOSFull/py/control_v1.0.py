@@ -1,3 +1,4 @@
+from gpiozero import PhaseEnableMotor
 from pyPS4Controller.controller import Controller
 #
 # Define controller connection & disconnection routines
