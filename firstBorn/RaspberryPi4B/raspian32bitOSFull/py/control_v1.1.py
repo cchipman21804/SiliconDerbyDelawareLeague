@@ -1,3 +1,4 @@
+from gpiozero import PhaseEnableMotor,Servo
 from pyPS4Controller.controller import Controller
 #
 # Define controller connection & disconnection routines
@@ -75,7 +76,7 @@ def rmb():
 # This Python script will send commands to the H-bridge and any connected DC motors
 # based on input from a PS4 controller
 #
-pgmName = 'control_v1.0'
+pgmName = 'control_v1.1'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -86,6 +87,10 @@ dirR = 27 #27 or 24  # Pin 6 goes HIGH
 # create Motor classes with independent control pins & enable speed control if desired
 motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=False)
+#
+# hard-coded values for min & max pulse width are suitable for the
+# Parallex Standard Servo (#900-00005) 180 degree movement
+servo = Servo(4,min_pulse_width=0.75/1000,max_pulse_width=2.25/1000)
 #
 class MyController(Controller):
 
@@ -119,6 +124,25 @@ class MyController(Controller):
     def on_triangle_release(self):
         print(f"[{pgmName}]> Right Motor Stop")
         stop()
+
+#    def on_L3_x_at_rest(self):
+    def on_square_press(self):
+        print(f"[{pgmName}]> Look Left")
+        servo.max()
+
+#    def on_L3_left(self):
+    def on_square_release(self):
+        print(f"[{pgmName}]> Look Straight Ahead")
+        servo.mid()
+
+    def on_circle_release(self):
+        print(f"[{pgmName}]> Look Straight Ahead")
+        servo.mid()
+
+#    def on_L3_right(self):
+    def on_circle_press(self):
+        print(f"[{pgmName}]> Look Right")
+        servo.min()
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
