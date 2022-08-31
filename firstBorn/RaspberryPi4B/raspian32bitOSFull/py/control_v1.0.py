@@ -127,6 +127,7 @@ class MyController(Controller):
 
 #    def on_L3_x_at_rest(self):
     def on_square_press(self):
+        print(f"[{phmName}]> Look Left")
         servo.max()
 
 #    def on_L3_left(self):
@@ -134,10 +135,12 @@ class MyController(Controller):
         servo.mid()
 
     def on_circle_release(self):
+        print(f"[{phmName}]> Look Straight Ahead")
         servo.mid()
 
 #    def on_L3_right(self):
     def on_circle_press(self):
+        print(f"[{phmName}]> Look Right")
         servo.min()
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
