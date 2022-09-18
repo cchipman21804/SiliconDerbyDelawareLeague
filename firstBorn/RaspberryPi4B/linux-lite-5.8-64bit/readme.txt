@@ -6,6 +6,9 @@ The OLED display requires the installation of the Adafruit OLED Python module & 
 "sudo pip3 install adafruit-circuitpython-ssd1306"
 "sudo apt-get install python3-pil"
 
+Use of a PS4 controller requires the installation of the pyPS4Controller module:
+"sudo pip3 install pyPS4Controller"
+
 etc ------------------ required files for /etc folder
 etc/rc.local --------- Executes py/autostart.py upon bootup
 
