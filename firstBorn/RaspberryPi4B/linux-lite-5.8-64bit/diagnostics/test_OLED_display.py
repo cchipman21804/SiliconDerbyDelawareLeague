@@ -29,6 +29,9 @@ import busio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
 
+# cputemp script folder
+cputempfldr = '/home/pi/SiliconDerbyDelawareLeague/firstBorn/RaspberryPi4B/raspian32bitOSFull/diagnostics/'
+
 # Create the I2C interface.
 i2c = busio.I2C(SCL, SDA)
 
@@ -86,7 +89,7 @@ while True:
 #    MemUsage = subprocess.check_output(cmd, shell=True).decode("utf-8")
 #
 #
-    cmd = 'python3 cputemp1.1.py'
+    cmd = f"python3 {cputempfldr}cputemp1.1.py"
     howHot = subprocess.check_output(cmd, shell=True).decode("utf-8")
 #
     cmd = 'df -h | awk \'$NF=="/"{printf "Disk: %d/%d GB  %s", $3,$2,$5}\''

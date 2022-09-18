@@ -2,6 +2,7 @@ heartBeat.py ---------- throbs an RGB LED an beeps a piezo element to indicate s
 motorTest.py ---------- cycles through each propulsion state
 randomDance.py -------- performs random dance moves by sending random commands to the propulsion motors
 testBuzzer.py --------- beeps a piezo element
+libcamera-hello ------- displays a camera preview window for 5 seconds
 testEyes.py ----------- retrieves sensor data from an Arduino Uno via an http connection
 test_OLED_display.py -- displays various system statistics on OLED display
 testPIR.py ------------ detects motion
