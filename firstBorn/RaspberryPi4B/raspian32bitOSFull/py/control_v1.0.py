@@ -133,10 +133,14 @@ class MyController(Controller):
         print(f"[{pgmName}]> {triangleRlsMsg}")
         stop()
 
+joysticks = []
 inputDevices = os.listdir('/dev/input')
-#if 'js0' in inputDevices:
+print(f"All Input Devices: {inputDevices}")
+for device in inputDevices:
+    if 'js' in device:
+        joysticks.append(device)
+print(f"Joysticks: {joysticks}")
 
-print(f"{inputDevices}")
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
 #
