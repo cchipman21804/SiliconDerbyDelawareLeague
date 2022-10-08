@@ -77,6 +77,9 @@ def rmb():
 # based on input from a PS4 controller
 #
 pgmName = 'control_v1.1'
+upArwPrsMsg = 'Left Motor Forward'
+trianglePrsMsg = 'Right Motor Forward'
+dwnArwPrsMsg = 'Left Motor Reverse'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -98,15 +101,15 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_up_arrow_press(self):
-        print(f"[{pgmName}]> Left Motor Forward")
+        print(f"[{pgmName}]> {upArwPrsMsg}")
         lmf()
 
     def on_triangle_press(self):
-        print(f"[{pgmName}]> Right Motor Forward")
+        print(f"[{pgmName}]> {trianglePrsMsg}")
         rmf()
 
     def on_down_arrow_press(self):
-        print(f"[{pgmName}]> Left Motor Reverse")
+        print(f"[{pgmName}]> {dwnArwPrsMsg}")
         lmb()
 
     def on_x_press(self):
