@@ -62,7 +62,7 @@ def ccwSpin():
     motorRight.forward()
 #
 def lmf():
-    motorLeft.forward(speed=0.5)
+    motorLeft.forward(speed=0.75)
 #
 def lmb():
     motorLeft.backward()
