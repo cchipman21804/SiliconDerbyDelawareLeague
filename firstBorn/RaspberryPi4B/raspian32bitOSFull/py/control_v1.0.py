@@ -157,5 +157,6 @@ for n,js in enumerate(joysticks):
 thisone = "/dev/input/js" + str(max(joysticks))
 #
 controller = MyController(interface=thisone, connecting_using_ds4drv=False)
+controller.debug = True
 controller.listen(on_connect=connect, on_disconnect=disconnect)
 #
