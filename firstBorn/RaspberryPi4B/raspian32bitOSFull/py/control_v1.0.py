@@ -65,13 +65,13 @@ def lmf():
     motorLeft.forward() #speed=0.75)
 #
 def lmb():
-    motorLeft.backward(speed=0.5)
+    motorLeft.backward() #speed=0.5)
 #
 def rmf():
     motorRight.forward()
 #
 def rmb():
-    motorRight.backward(speed=0.5)
+    motorRight.backward() #speed=0.5)
 #
 # This Python script will send commands to the H-bridge and any connected DC motors
 # based on input from a PS4 controller
