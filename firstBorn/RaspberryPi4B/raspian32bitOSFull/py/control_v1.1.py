@@ -80,6 +80,14 @@ pgmName = 'control_v1.1'
 upArwPrsMsg = 'Left Motor Forward'
 trianglePrsMsg = 'Right Motor Forward'
 dwnArwPrsMsg = 'Left Motor Reverse'
+xPrsMsg = 'Right Motor Reverse'
+upDwnArwRlsMsg = 'Left Motor Stop'
+xRlsMsg = 'Right Motor Stop'
+triangleRlsMsg = xRlsMsg
+sqrPrsMsg = 'Look Left'
+sqrRlsMsg = 'Look Straight Ahead'
+crclPrsMsg = 'Look Right'
+crclRlsMsg = sqrRlsMsg
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -113,38 +121,38 @@ class MyController(Controller):
         lmb()
 
     def on_x_press(self):
-        print(f"[{pgmName}]> Right Motor Reverse")
+        print(f"[{pgmName}]> {xPrsMsg}")
         rmb()
 
     def on_up_down_arrow_release(self):
-        print(f"[{pgmName}]> Left Motor Stop")
+        print(f"[{pgmName}]> {upDwnArwRlsMsg}")
         stop()
 
     def on_x_release(self):
-        print(f"[{pgmName}]> Right Motor Stop")
+        print(f"[{pgmName}]> {xRlsMsg}")
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmName}]> Right Motor Stop")
+        print(f"[{pgmName}]> {triangleRlsMsg}")
         stop()
 
 #    def on_L3_x_at_rest(self):
     def on_square_press(self):
-        print(f"[{pgmName}]> Look Left")
+        print(f"[{pgmName}]> {sqrPrsMsg}")
         servo.max()
 
 #    def on_L3_left(self):
     def on_square_release(self):
-        print(f"[{pgmName}]> Look Straight Ahead")
+        print(f"[{pgmName}]> {sqrRlsMsg}")
         servo.mid()
 
     def on_circle_release(self):
-        print(f"[{pgmName}]> Look Straight Ahead")
+        print(f"[{pgmName}]> {crclRlsMsg}")
         servo.mid()
 
 #    def on_L3_right(self):
     def on_circle_press(self):
-        print(f"[{pgmName}]> Look Right")
+        print(f"[{pgmName}]> {crclPrsMsg}")
         servo.min()
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)

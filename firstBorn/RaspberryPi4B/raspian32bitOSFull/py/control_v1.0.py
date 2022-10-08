@@ -77,6 +77,17 @@ def rmb():
 # based on input from a PS4 controller
 #
 pgmName = 'control_v1.0'
+upArwPrsMsg = 'Left Motor Forward'
+trianglePrsMsg = 'Right Motor Forward'
+dwnArwPrsMsg = 'Left Motor Reverse'
+xPrsMsg = 'Right Motor Reverse'
+upDwnArwRlsMsg = 'Left Motor Stop'
+xRlsMsg = 'Right Motor Stop'
+triangleRlsMsg = xRlsMsg
+sqrPrsMsg = 'Look Left'
+sqrRlsMsg = 'Look Straight Ahead'
+crclPrsMsg = 'Look Right'
+crclRlsMsg = sqrRlsMsg
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -94,31 +105,31 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_up_arrow_press(self):
-        print(f"[{pgmName}]> Left Motor Forward")
+        print(f"[{pgmName}]> {upArwPrsMsg}")
         lmf()
 
     def on_triangle_press(self):
-        print(f"[{pgmName}]> Right Motor Forward")
+        print(f"[{pgmName}]> {trianglePrsMsg}")
         rmf()
 
     def on_down_arrow_press(self):
-        print(f"[{pgmName}]> Left Motor Reverse")
+        print(f"[{pgmName}]> {dwnArwPrsMsg}")
         lmb()
 
     def on_x_press(self):
-        print(f"[{pgmName}]> Right Motor Reverse")
+        print(f"[{pgmName}]> {xPrsMsg}")
         rmb()
 
     def on_up_down_arrow_release(self):
-        print(f"[{pgmName}]> Left Motor Stop")
+        print(f"[{pgmName}]> {upDwnArwRlsMsg}")
         stop()
 
     def on_x_release(self):
-        print(f"[{pgmName}]> Right Motor Stop")
+        print(f"[{pgmName}]> {xRlsMsg}")
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmName}]> Right Motor Stop")
+        print(f"[{pgmName}]> {triangleRlsMsg}")
         stop()
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
