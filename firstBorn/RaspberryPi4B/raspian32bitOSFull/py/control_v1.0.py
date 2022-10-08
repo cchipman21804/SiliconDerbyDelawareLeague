@@ -21,8 +21,8 @@ def stop():
 # Specifying a value for v between 0 & 1 will control the motors' speed
 def straightFwd():
     # Run both motors forward
-    motorLeft.forward(speed=0.0) # 1 = Full Speed
-    motorRight.forward(speed=1.0) # 1 = Full Speed
+    motorLeft.forward() # 1 = Full Speed
+    motorRight.forward() # 1 = Full Speed
 #
 def straightRev():
     # Run both motors in reverse
@@ -31,23 +31,23 @@ def straightRev():
 #
 def fwdLeft():
     # Run right motor forward
-    motorLeft.stop() # vl) # 0 = Stopped
+#    motorLeft.stop() # vl) # 0 = Stopped
     motorRight.forward()
 #
 def fwdRight():
     # Run left motor forward
     motorLeft.forward()
-    motorRight.stop() # vr) # 0 = Stopped
+#    motorRight.stop() # vr) # 0 = Stopped
 #
 def revLeft():
     # Run right motor forward
-    motorLeft.stop() # vl) # 0 = Stopped
+#    motorLeft.stop() # vl) # 0 = Stopped
     motorRight.backward()
 #
 def revRight():
     # Run left motor forward
     motorLeft.backward()
-    motorRight.stop() # vr) # 0 = Stopped
+#    motorRight.stop() # vr) # 0 = Stopped
 #
 def cwSpin():
     # Run left motor forward
@@ -96,7 +96,7 @@ goR = 17 #17 or 23   # Pin 5 goes HIGH
 dirR = 27 #27 or 24  # Pin 6 goes HIGH
 #
 # create Motor classes with independent control pins & enable speed control if desired
-motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
+motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=False)
 #
 class MyController(Controller):
