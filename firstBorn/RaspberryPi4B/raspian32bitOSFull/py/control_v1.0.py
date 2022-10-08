@@ -154,7 +154,7 @@ class MyController(Controller):
 
     def on_L2_press(self,name):
         speed=(name+32768)/65535
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Speed: {speed:%2}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Speed: {speed:2%}]")
         lmf(speed)
 
     def on_L2_release(self):
