@@ -162,7 +162,7 @@ class MyController(Controller):
         stop()
 
     def on_R2_press(self,name):
-        speed=((name+32768)/65535)
+        speed=(name+32768)/65535
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Speed: {speed:.2%}]")
         rmf(speed)
 
@@ -175,20 +175,24 @@ class MyController(Controller):
         stop()
 
     def on_L3_up(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Forward Speed: {abs(name)/32767}]")
-        lmf(abs(name)/32767)
+        speed=abs(name)/32767
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Forward Speed: {speed:.2%}]")
+        lmf(speed)
 
     def on_L3_down(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Reverse Speed: {name/32767}]")
-        lmb(name/32767)
+        speed=name/32767
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Reverse Speed: {speed:.2%}]")
+        lmb(speed)
 
     def on_R3_up(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Forward Speed: {abs(name)/32767}]")
-        rmf(abs(name)/32767)
+        speed=abs(name)/32767
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Forward Speed: {speed:.2%}]")
+        rmf(speed)
 
     def on_R3_down(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Reverse Speed: {name/32767}]")
-        rmb(name/32767)
+        speed=name/32767
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Reverse Speed: {speed:.2%}]")
+        rmb(speed)
 
     def on_R3_y_at_rest(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R3JoyCntrMsg}]")
