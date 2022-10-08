@@ -132,18 +132,26 @@ class MyController(Controller):
     def on_triangle_release(self):
         print(f"[{pgmName}]> {triangleRlsMsg}")
         stop()
-
-joysticks = []
+#
+# Find all input devices
 inputDevices = os.listdir('/dev/input')
 print(f"All Input Devices: {inputDevices}")
+#
+# Initialize list of joysticks
+joysticks = []
 for device in inputDevices:
     if 'js' in device:
-        joysticks.append(device)
+        joysticks.append(device) # Add joystick devices to list of joysticks
 print(f"Joysticks: {joysticks}")
+#
+# Extract numerals from device names
 for n,js in enumerate(joysticks):
     joysticks[n] = int(js[-1])
 print(f"Joysticks: {joysticks}")
-
-controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+#
+# Use the joystick device with the highest number
+thisone = "/dev/input/js" + str(max(js))
+#
+controller = MyController(interface=thisone, connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
 #
