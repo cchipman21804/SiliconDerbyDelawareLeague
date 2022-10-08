@@ -1,5 +1,6 @@
 from gpiozero import PhaseEnableMotor
 from pyPS4Controller.controller import Controller
+import os
 #
 # Define controller connection & disconnection routines
 #
@@ -132,6 +133,10 @@ class MyController(Controller):
         print(f"[{pgmName}]> {triangleRlsMsg}")
         stop()
 
+inputDevices = os.listdir('/dev/input')
+#if 'js0' in inputDevices:
+
+print(f"{inputDevices}")
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
 #
