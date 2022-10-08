@@ -110,31 +110,31 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_up_arrow_press(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {upArwPrsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{upArwPrsMsg}]")
         lmf()
 
     def on_triangle_press(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {trianglePrsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{trianglePrsMsg}]")
         rmf()
 
     def on_down_arrow_press(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {dwnArwPrsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{dwnArwPrsMsg}]")
         lmb()
 
     def on_x_press(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {xPrsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{xPrsMsg}]")
         rmb()
 
     def on_up_down_arrow_release(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {upDwnArwRlsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{upDwnArwRlsMsg}]")
         stop()
 
     def on_x_release(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {xRlsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{xRlsMsg}]")
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmName}]> {dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')} {triangleRlsMsg}")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{triangleRlsMsg}]")
         stop()
 #
 # Find all input devices
