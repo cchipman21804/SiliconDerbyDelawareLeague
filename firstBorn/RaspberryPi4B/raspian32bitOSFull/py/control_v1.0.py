@@ -91,6 +91,7 @@ sqrRlsMsg = 'Look Straight Ahead'
 crclPrsMsg = 'Look Right'
 crclRlsMsg = sqrRlsMsg
 L2RlsMsg = 'L2 Released'
+R2RlsMsg = 'R2 Released'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -140,6 +141,12 @@ class MyController(Controller):
 
     def on_L2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L2RlsMsg}]")
+
+    def on_R2_press(self,name):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{type(name)} {name} {(name+32768)/65535}]")
+
+    def on_R2_release(self):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R2RlsMsg}]")
 #
 # Find all input devices
 inputDevices = os.listdir('/dev/input')
