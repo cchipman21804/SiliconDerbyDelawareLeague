@@ -134,7 +134,7 @@ class MyController(Controller):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{triangleRlsMsg}]")
         stop()
 
-    def on_L2_press(self):
+    def on_L2_press():
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [L2 pressed]")
 #
 # Find all input devices
