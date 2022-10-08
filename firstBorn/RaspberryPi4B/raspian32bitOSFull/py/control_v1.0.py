@@ -63,17 +63,17 @@ def ccwSpin():
     motorLeft.backward()
     motorRight.forward()
 #
-def lmf():
-    motorLeft.forward() #speed=0.75)
+def lmf(s):
+    motorLeft.forward(speed=s) #speed=0.75)
 #
 def lmb():
-    motorLeft.backward() #speed=0.5)
+    motorLeft.backward(speed=s) #speed=0.5)
 #
 def rmf():
-    motorRight.forward()
+    motorRight.forward(speed=s)
 #
 def rmb():
-    motorRight.backward() #speed=0.5)
+    motorRight.backward(speed=s) #speed=0.5)
 #
 # This Python script will send commands to the H-bridge and any connected DC motors
 # based on input from a PS4 controller
@@ -110,19 +110,19 @@ class MyController(Controller):
 
     def on_up_arrow_press(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{upArwPrsMsg}]")
-        lmf()
+        lmf(1.0)
 
     def on_triangle_press(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{trianglePrsMsg}]")
-        rmf()
+        rmf(1.0)
 
     def on_down_arrow_press(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{dwnArwPrsMsg}]")
-        lmb()
+        lmb(1.0)
 
     def on_x_press(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{xPrsMsg}]")
-        rmb()
+        rmb(1.0)
 
     def on_up_down_arrow_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{upDwnArwRlsMsg}]")
@@ -137,16 +137,18 @@ class MyController(Controller):
         stop()
 
     def on_L2_press(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{type(name)} {name} {(name+32768)/65535}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Speed: {(name+32768)/65535}]")
 
     def on_L2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L2RlsMsg}]")
+        stop()
 
     def on_R2_press(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{type(name)} {name} {(name+32768)/65535}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Speed: {(name+32768)/65535}]")
 
     def on_R2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R2RlsMsg}]")
+        stop()
 #
 # Find all input devices
 inputDevices = os.listdir('/dev/input')
