@@ -135,7 +135,7 @@ class MyController(Controller):
         stop()
 
     def on_L2_press(self):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{self.value}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{on_L2_press.value}]")
 #
 # Find all input devices
 inputDevices = os.listdir('/dev/input')
