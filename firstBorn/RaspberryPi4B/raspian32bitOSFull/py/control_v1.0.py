@@ -154,7 +154,7 @@ class MyController(Controller):
 
     def on_L2_press(self,name):
         speed=(name+32768)/65535
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Speed: {speed:2%}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Speed: {speed:.2%}]")
         lmf(speed)
 
     def on_L2_release(self):
@@ -162,8 +162,9 @@ class MyController(Controller):
         stop()
 
     def on_R2_press(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Speed: {(name+32768)/65535}]")
-        rmf((name+32768)/65535)
+        speed=((name+32768)/65535)
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Right Motor Speed: {speed:.2%}]")
+        rmf(speed)
 
     def on_R2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R2RlsMsg}]")
