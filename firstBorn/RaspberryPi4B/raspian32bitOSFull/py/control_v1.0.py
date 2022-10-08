@@ -67,15 +67,12 @@ def lmf():
     motorLeft.forward() #speed=0.75)
 #
 def lmb():
-    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorLeft.backward() #speed=0.5)
 #
 def rmf():
-    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorRight.forward()
 #
 def rmb():
-    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorRight.backward() #speed=0.5)
 #
 # This Python script will send commands to the H-bridge and any connected DC motors
