@@ -32,11 +32,11 @@ def straightRev():
 def fwdLeft():
     # Run right motor forward
 #    motorLeft.stop() # vl) # 0 = Stopped
-    motorRight.forward(speed=0.5)
+    motorRight.forward()
 #
 def fwdRight():
     # Run left motor forward
-    motorLeft.forward()
+    motorLeft.forward(speed=0.5)
 #    motorRight.stop() # vr) # 0 = Stopped
 #
 def revLeft():
