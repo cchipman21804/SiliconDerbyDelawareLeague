@@ -1,3 +1,4 @@
+import datetime as dt
 from gpiozero import PhaseEnableMotor
 from pyPS4Controller.controller import Controller
 import os
@@ -63,15 +64,19 @@ def ccwSpin():
     motorRight.forward()
 #
 def lmf():
+    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorLeft.forward() #speed=0.75)
 #
 def lmb():
+    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorLeft.backward() #speed=0.5)
 #
 def rmf():
+    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorRight.forward()
 #
 def rmb():
+    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorRight.backward() #speed=0.5)
 #
 # This Python script will send commands to the H-bridge and any connected DC motors
@@ -89,6 +94,7 @@ sqrPrsMsg = 'Look Left'
 sqrRlsMsg = 'Look Straight Ahead'
 crclPrsMsg = 'Look Right'
 crclRlsMsg = sqrRlsMsg
+logtime = ''
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -106,31 +112,31 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_up_arrow_press(self):
-        print(f"[{pgmName}]> {upArwPrsMsg}")
+        print(f"[{pgmName}]> {logtime} {upArwPrsMsg}")
         lmf()
 
     def on_triangle_press(self):
-        print(f"[{pgmName}]> {trianglePrsMsg}")
+        print(f"[{pgmName}]> {logtime} {trianglePrsMsg}")
         rmf()
 
     def on_down_arrow_press(self):
-        print(f"[{pgmName}]> {dwnArwPrsMsg}")
+        print(f"[{pgmName}]> {logtime} {dwnArwPrsMsg}")
         lmb()
 
     def on_x_press(self):
-        print(f"[{pgmName}]> {xPrsMsg}")
+        print(f"[{pgmName}]> {logtime} {xPrsMsg}")
         rmb()
 
     def on_up_down_arrow_release(self):
-        print(f"[{pgmName}]> {upDwnArwRlsMsg}")
+        print(f"[{pgmName}]> {logtime} {upDwnArwRlsMsg}")
         stop()
 
     def on_x_release(self):
-        print(f"[{pgmName}]> {xRlsMsg}")
+        print(f"[{pgmName}]> {logtime} {xRlsMsg}")
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmName}]> {triangleRlsMsg}")
+        print(f"[{pgmName}]> {logtime} {triangleRlsMsg}")
         stop()
 #
 # Find all input devices
