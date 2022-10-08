@@ -32,7 +32,7 @@ def straightRev():
 def fwdLeft():
     # Run right motor forward
 #    motorLeft.stop() # vl) # 0 = Stopped
-    motorRight.forward()
+    motorRight.forward(speed=0.5)
 #
 def fwdRight():
     # Run left motor forward
@@ -96,8 +96,8 @@ goR = 17 #17 or 23   # Pin 5 goes HIGH
 dirR = 27 #27 or 24  # Pin 6 goes HIGH
 #
 # create Motor classes with independent control pins & enable speed control if desired
-motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
-motorRight = PhaseEnableMotor(dirR,goR,pwm=False)
+motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
+motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 class MyController(Controller):
 
