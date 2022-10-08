@@ -140,6 +140,9 @@ for device in inputDevices:
     if 'js' in device:
         joysticks.append(device)
 print(f"Joysticks: {joysticks}")
+for n,js in enumerate(joysticks):
+    joysticks[n] = int(js[:-1])
+print(f"Joysticks: {joysticks}")
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
