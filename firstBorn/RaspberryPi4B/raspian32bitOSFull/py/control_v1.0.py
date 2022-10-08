@@ -66,13 +66,13 @@ def ccwSpin():
 def lmf(s):
     motorLeft.forward(speed=s) #speed=0.75)
 #
-def lmb():
+def lmb(s):
     motorLeft.backward(speed=s) #speed=0.5)
 #
-def rmf():
+def rmf(s):
     motorRight.forward(speed=s)
 #
-def rmb():
+def rmb(s):
     motorRight.backward(speed=s) #speed=0.5)
 #
 # This Python script will send commands to the H-bridge and any connected DC motors
