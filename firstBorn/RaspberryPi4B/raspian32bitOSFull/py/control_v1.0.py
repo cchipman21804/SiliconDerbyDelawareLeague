@@ -130,12 +130,15 @@ class MyController(Controller):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{xRlsMsg}]")
         stop()
 
-    def on_triangle_release(self):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{triangleRlsMsg}]")
+    def on_triangle_release(self,name):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{name}{triangleRlsMsg}]")
         stop()
 
-#    def on_L2_press():
-#        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [L2 pressed]")
+    def on_L2_press(self,name):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{name}]")
+
+    def on_L2_release(self,name):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{name}]")
 #
 # Find all input devices
 inputDevices = os.listdir('/dev/input')
