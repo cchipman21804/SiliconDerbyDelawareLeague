@@ -36,7 +36,7 @@ def fwdLeft():
 #
 def fwdRight():
     # Run left motor forward
-    motorLeft.forward(speed=0.5)
+    motorLeft.forward()
 #    motorRight.stop() # vr) # 0 = Stopped
 #
 def revLeft():
@@ -62,7 +62,7 @@ def ccwSpin():
     motorRight.forward()
 #
 def lmf():
-    motorLeft.forward()
+    motorLeft.forward(speed=0.5)
 #
 def lmb():
     motorLeft.backward()
