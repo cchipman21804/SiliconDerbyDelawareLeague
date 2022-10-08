@@ -141,7 +141,7 @@ for device in inputDevices:
         joysticks.append(device)
 print(f"Joysticks: {joysticks}")
 for n,js in enumerate(joysticks):
-    joysticks[n] = int(js[:-1])
+    joysticks[n] = int(js[-1])
 print(f"Joysticks: {joysticks}")
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
