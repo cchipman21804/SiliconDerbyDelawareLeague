@@ -133,6 +133,9 @@ class MyController(Controller):
     def on_triangle_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{triangleRlsMsg}]")
         stop()
+
+    def on_L2_press(self):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{self.value}]")
 #
 # Find all input devices
 inputDevices = os.listdir('/dev/input')
