@@ -144,4 +144,3 @@ print(f"Joysticks: {joysticks}")
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 controller.listen(on_connect=connect, on_disconnect=disconnect)
 #
-print(f"Joysticks: {joysticks}")
