@@ -136,7 +136,7 @@ class MyController(Controller):
         stop()
 
     def on_L2_press(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{type(name)}{name}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{type(name)} {name} {(name+32768)/65535}]")
 
     def on_L2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L2RlsMsg}]")
