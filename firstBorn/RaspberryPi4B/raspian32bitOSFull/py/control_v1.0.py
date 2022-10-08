@@ -21,7 +21,7 @@ def stop():
 # Specifying a value for v between 0 & 1 will control the motors' speed
 def straightFwd():
     # Run both motors forward
-    motorLeft.forward(speed=0.75) # 1 = Full Speed
+    motorLeft.forward(speed=0.5) # 1 = Full Speed
     motorRight.forward(speed=1.0) # 1 = Full Speed
 #
 def straightRev():
