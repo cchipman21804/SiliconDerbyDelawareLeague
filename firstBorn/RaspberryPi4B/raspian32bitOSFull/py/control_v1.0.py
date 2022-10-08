@@ -1,7 +1,21 @@
-import datetime as dt
+#
+# Current controls:
+#
+# Up Arrow --------- Left Motor Forward Full Speed
+# Down Arrow ------- Left Motor Backward Full Speed
+# Triangle Button -- Right Motor Forward Full Speed
+# X Button --------- Right Motor Backward Full Speed
+#
+# L2 --------------- Left Motor Forward Speed Control
+# R2 --------------- Right Motor Forward Speed Control
+#
+# L3 (Y-axis) ------ Left Motor Direction & Speed Control
+# R3 (Y-axis) ------ Right Motor Direction & Speed Control
+#
+import datetime as dt # Generates timestamps for log
 from gpiozero import PhaseEnableMotor
 from pyPS4Controller.controller import Controller
-import os
+import os # Retrieves list of input devices (including joysticks)
 #
 # Define controller connection & disconnection routines
 #
@@ -13,7 +27,7 @@ def disconnect():
     stop()
     #pass
 #
-# Define the directional control functions
+# Define the command motor control functions
 #
 def stop():
     # Stop both motors
@@ -92,6 +106,8 @@ crclPrsMsg = 'Look Right'
 crclRlsMsg = sqrRlsMsg
 L2RlsMsg = 'L2 Released'
 R2RlsMsg = 'R2 Released'
+L3JoyCntrMsg = 'L3 joystick centered'
+R3JoyCntrMsg = 'R3 joystick centered'
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -150,6 +166,28 @@ class MyController(Controller):
 
     def on_R2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R2RlsMsg}]")
+        stop()
+
+    def on_L3_y_at_rest(self):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L3JoyCntrMsg}]")
+        stop()
+
+    def on_L3_up(self,name):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Forward Speed: {abs(name)/32767}]")
+        stop()
+
+    def on_L3_down(self,name):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [Left Motor Reverse Speed: {name/32767}]")
+        stop()
+
+    def on_R3_up(self,name):
+        stop()
+
+    def on_R3_down(self,name):
+        stop()
+
+    def on_R3_y_at_rest(self):
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R3JoyCntrMsg}]")
         stop()
 #
 # Find all input devices
