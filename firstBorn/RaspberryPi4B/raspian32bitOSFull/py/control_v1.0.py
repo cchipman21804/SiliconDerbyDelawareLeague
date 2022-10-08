@@ -64,7 +64,6 @@ def ccwSpin():
     motorRight.forward()
 #
 def lmf():
-    logtime = dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")
     motorLeft.forward() #speed=0.75)
 #
 def lmb():
@@ -94,7 +93,6 @@ sqrPrsMsg = 'Look Left'
 sqrRlsMsg = 'Look Straight Ahead'
 crclPrsMsg = 'Look Right'
 crclRlsMsg = sqrRlsMsg
-logtime = ''
 #
 # specify H-Bridge control pins
 goL = 23 #23 or 17
@@ -112,31 +110,31 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_up_arrow_press(self):
-        print(f"[{pgmName}]> {logtime} {upArwPrsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {upArwPrsMsg}")
         lmf()
 
     def on_triangle_press(self):
-        print(f"[{pgmName}]> {logtime} {trianglePrsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {trianglePrsMsg}")
         rmf()
 
     def on_down_arrow_press(self):
-        print(f"[{pgmName}]> {logtime} {dwnArwPrsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {dwnArwPrsMsg}")
         lmb()
 
     def on_x_press(self):
-        print(f"[{pgmName}]> {logtime} {xPrsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {xPrsMsg}")
         rmb()
 
     def on_up_down_arrow_release(self):
-        print(f"[{pgmName}]> {logtime} {upDwnArwRlsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {upDwnArwRlsMsg}")
         stop()
 
     def on_x_release(self):
-        print(f"[{pgmName}]> {logtime} {xRlsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {xRlsMsg}")
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmName}]> {logtime} {triangleRlsMsg}")
+        print(f"[{pgmName}]> {dt.datetime.now().strftime("%a %b %d %Y @%H:%M:%S.%f")} {triangleRlsMsg}")
         stop()
 #
 # Find all input devices
