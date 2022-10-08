@@ -132,11 +132,11 @@ class MyController(Controller):
         stop()
 
     def on_triangle_release(self):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{name}{triangleRlsMsg}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{triangleRlsMsg}]")
         stop()
 
     def on_L2_press(self,name):
-        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{name}]")
+        print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{type(name)}{name}]")
 
     def on_L2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L2RlsMsg}]")
