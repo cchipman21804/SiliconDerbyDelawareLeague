@@ -13,7 +13,7 @@ face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_alt2.xml'
 cap = cv2.VideoCapture(0)
 
 while (True):
-    # CApture frame by frame
+    # Capture frame by frame
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
@@ -21,10 +21,12 @@ while (True):
         print(x,y,w,h)
         roi_gray = gray[y:y+h,x:x+w]
         roi_color = frame[y:y+h,x:x+w]
-        img_item = "myface.png"
+#
+# Send this to web server?
+#        img_item = "myface.png"
 #        cv2.imwrite(img_item, roi_gray)
-
-        color = (0,255,0) # BGR
+#
+        color = (255,255,255) # BGR
         stroke = 4 # line thickness
         end_x = x+w
         end_y = y+h
@@ -32,6 +34,8 @@ while (True):
         
     # Display the resulting frame
     cv2.imshow('frame',frame)
+    
+    # Press 'Q' to quit
     if cv2.waitKey(20) & 0xFF == ord('q'):
         break
 
