@@ -22,7 +22,7 @@ while (True):
         roi_gray = gray[y:y+h,x:x+w]
         roi_color = frame[y:y+h,x:x+w]
         img_item = "myface.png"
-        cv2.imwrite(img_item, roi_gray)
+#        cv2.imwrite(img_item, roi_gray)
 
         color = (0,255,0) # BGR
         stroke = 4 # line thickness
