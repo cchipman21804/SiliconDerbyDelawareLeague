@@ -24,7 +24,7 @@ while (True):
         img_item = "myface.png"
         cv2.imwrite(img_item, roi_gray)
 
-        color = (0,0,255) # BGR
+        color = (0,255,0) # BGR
         stroke = 4 # line thickness
         end_x = x+w
         end_y = y+h
