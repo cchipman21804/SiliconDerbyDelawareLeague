@@ -1,6 +1,40 @@
 import cv2
 import numpy as np
 #import os
+from gpiozero import PhaseEnableMotor
+from time import sleep
+
+#
+# Define the command motor control functions
+#
+def stop():
+    # Stop both motors
+    motorLeft.stop()
+    motorRight.stop()
+#
+def cwSpin():
+    # Run left motor forward
+    # Run right motor backward
+    motorLeft.forward()
+    motorRight.backward()
+#
+def ccwSpin():
+    # Run left motor forward
+    # Run right motor backward
+    motorLeft.backward()
+    motorRight.forward()
+#
+def lmf(s):
+    motorLeft.forward(speed=s) #speed=0.75)
+#
+def lmb(s):
+    motorLeft.backward(speed=s) #speed=0.5)
+#
+def rmf(s):
+    motorRight.forward(speed=s)
+#
+def rmb(s):
+    motorRight.backward(speed=s) #speed=0.5)
 
 #print(os.listdir())
 
@@ -8,9 +42,23 @@ import numpy as np
 #/usr/local/lib/python3.9/dist-packages/cv2/data/
 datafldr='/usr/local/lib/python3.9/dist-packages/cv2/data/'
 # face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_default.xml')
-face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_alt2.xml')
-# face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalcatface.xml')
+# face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_alt2.xml')
+face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalcatface.xml')
 cap = cv2.VideoCapture(0)
+
+#
+# specify H-Bridge control pins
+goL = 23 #23 or 17
+dirL = 24 #24 or 27
+goR = 17 #17 or 23   # Pin 5 goes HIGH
+dirR = 27 #27 or 24  # Pin 6 goes HIGH
+#
+# create Motor classes with independent control pins & enable speed control if desired
+motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
+motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
+#
+
+stop()
 
 while (True):
     # Capture frame by frame
@@ -32,6 +80,11 @@ while (True):
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke)
         
+        cwSpin()
+        sleep(0.25)
+        ccwSpin()
+        sleep(0.25)
+
     # Display the resulting frame
     cv2.imshow('frame',frame)
     
