@@ -80,10 +80,13 @@ while (True):
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke)
         
-        cwSpin()
-        sleep(0.25)
-        ccwSpin()
-        sleep(0.25)
+#        cwSpin()
+#        sleep(0.25)
+#        ccwSpin()
+#        sleep(0.25)
+
+        lmf(0.5)
+        rmf(0.5)
 
     # Display the resulting frame
     cv2.imshow('frame',frame)
