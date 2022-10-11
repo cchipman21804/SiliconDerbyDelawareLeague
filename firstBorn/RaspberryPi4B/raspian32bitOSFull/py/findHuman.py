@@ -57,7 +57,7 @@ dirR = 27 #27 or 24  # Pin 6 goes HIGH
 motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
-
+print("try it")
 try:
     while (True):
         stop() # Stop the motors
