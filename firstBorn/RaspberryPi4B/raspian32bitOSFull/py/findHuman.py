@@ -58,7 +58,7 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 
-while (cv2.waitKey(1) & 0xFF == ord('q')): #True):
+while (cv2.waitKey(1) & 0xFF != ord('q')): #True):
     stop() # Stop the motors
     # Capture frame by frame
     ret, frame = cap.read()
