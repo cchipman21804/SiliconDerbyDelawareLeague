@@ -58,9 +58,8 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 
-stop()
-
 while (True):
+    stop() # Stop the motors
     # Capture frame by frame
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -85,7 +84,7 @@ while (True):
 #        ccwSpin()
 #        sleep(0.25)
 
-        lmf(0.5)
+        lmf(0.5) # Move toward the human
         rmf(0.5)
 
     # Display the resulting frame
