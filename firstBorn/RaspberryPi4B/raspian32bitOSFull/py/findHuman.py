@@ -9,6 +9,7 @@ from time import sleep
 #
 def stop():
     # Stop both motors
+    print("Stop both motors")
     motorLeft.stop()
     motorRight.stop()
 #
