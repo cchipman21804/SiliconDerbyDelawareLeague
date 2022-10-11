@@ -86,7 +86,7 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
         
         lmf(0.5) # Move toward the human
-        rmf(0.5)
+        rmf(1.0)
 #        cwSpin()
         sleep(0.5)
 #        stop()
