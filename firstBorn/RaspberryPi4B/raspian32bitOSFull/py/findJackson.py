@@ -84,6 +84,7 @@ while (True):
         sleep(0.25)
         ccwSpin()
         sleep(0.25)
+        stop()
 
     # Display the resulting frame
     cv2.imshow('frame',frame)
