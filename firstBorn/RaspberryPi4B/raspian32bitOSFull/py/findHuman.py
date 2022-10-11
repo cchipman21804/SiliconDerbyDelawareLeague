@@ -85,15 +85,14 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
         
-        cwSpin()
+        lmf(0.5) # Move toward the human
+        rmf(0.5)
+#        cwSpin()
         sleep(0.5)
+#        stop()
+#        ccwSpin()
+#        sleep(0.5)
         stop()
-        ccwSpin()
-        sleep(0.5)
-        stop()
-
-        #lmf(0.5) # Move toward the human
-        #rmf(0.5)
     
     # Press 'Q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
