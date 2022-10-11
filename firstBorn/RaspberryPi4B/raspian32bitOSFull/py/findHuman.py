@@ -58,7 +58,7 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 
-while (True):
+while (cv2.waitKey(1) & 0xFF == ord('q')): #True):
     stop() # Stop the motors
     # Capture frame by frame
     ret, frame = cap.read()
@@ -91,8 +91,8 @@ while (True):
     cv2.imshow('Where Is The Human?',frame)
     
     # Press 'Q' to quit
-    if cv2.waitKey(20) & 0xFF == ord('q'):
-        break
+    #if cv2.waitKey(20) & 0xFF == ord('q'):
+    #    break
 
 # Clean up
 cap.release()
