@@ -58,42 +58,44 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 
-while (cv2.waitKey(1) & 0xFF != ord('q')): #True):
-    stop() # Stop the motors
-    # Capture frame by frame
-    ret, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.7, minNeighbors=5)
-    for (x,y,w,h) in faces:
-        print(x,y,w,h)
-        roi_gray = gray[y:y+h,x:x+w]
-        roi_color = frame[y:y+h,x:x+w]
-#
-# Send this to web server?
-#        img_item = "myface.png"
-#        cv2.imwrite(img_item, roi_gray)
-#
-        color = (255,255,255) # BGR
-        stroke = 4 # line thickness
-        end_x = x+w
-        end_y = y+h
-        cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke)
+try:
+    while (True):
+        stop() # Stop the motors
+        # Capture frame by frame
+        ret, frame = cap.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.7, minNeighbors=5)
+        for (x,y,w,h) in faces:
+            print(x,y,w,h)
+            roi_gray = gray[y:y+h,x:x+w]
+            roi_color = frame[y:y+h,x:x+w]
+    #
+    # Send this to web server?
+    #        img_item = "myface.png"
+    #        cv2.imwrite(img_item, roi_gray)
+    #
+            color = (255,255,255) # BGR
+            stroke = 4 # line thickness
+            end_x = x+w
+            end_y = y+h
+            cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke)
+            
+    #        cwSpin()
+    #        sleep(0.25)
+    #        ccwSpin()
+    #        sleep(0.25)
+
+            lmf(0.5) # Move toward the human
+            rmf(0.5)
+
+        # Display the resulting frame
+        cv2.imshow('Where Is The Human?',frame)
         
-#        cwSpin()
-#        sleep(0.25)
-#        ccwSpin()
-#        sleep(0.25)
+        # Press 'Q' to quit
+        #if cv2.waitKey(20) & 0xFF == ord('q'):
+        #    break
 
-        lmf(0.5) # Move toward the human
-        rmf(0.5)
-
-    # Display the resulting frame
-    cv2.imshow('Where Is The Human?',frame)
-    
-    # Press 'Q' to quit
-    #if cv2.waitKey(20) & 0xFF == ord('q'):
-    #    break
-
-# Clean up
-cap.release()
-cv2.destroyAllWindows()
+except KeyboardInterrupt:
+    # Clean up
+    cap.release()
+    cv2.destroyAllWindows()
