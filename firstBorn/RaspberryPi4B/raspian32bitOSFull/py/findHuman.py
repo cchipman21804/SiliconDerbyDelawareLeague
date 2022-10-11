@@ -61,7 +61,7 @@ motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #print("try it")
 while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
 #    try:
-    stop() # Stop the motors
+    #stop() # Stop the motors
     # Capture frame by frame
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -83,15 +83,16 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         stroke = 4 # line thickness
         end_x = x+w
         end_y = y+h
-        cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke)
+        cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
         
-#        cwSpin()
-#        sleep(0.25)
+        cwSpin()
+        sleep(0.5)
+        stop()
 #        ccwSpin()
 #        sleep(0.25)
 
-        lmf(0.5) # Move toward the human
-        rmf(0.5)
+        #lmf(0.5) # Move toward the human
+        #rmf(0.5)
     
     # Press 'Q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
