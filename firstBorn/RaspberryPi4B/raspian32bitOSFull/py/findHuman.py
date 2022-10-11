@@ -88,8 +88,9 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         cwSpin()
         sleep(0.5)
         stop()
-#        ccwSpin()
-#        sleep(0.25)
+        ccwSpin()
+        sleep(0.25)
+        stop()
 
         #lmf(0.5) # Move toward the human
         #rmf(0.5)
