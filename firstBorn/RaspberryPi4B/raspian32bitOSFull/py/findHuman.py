@@ -64,6 +64,10 @@ try:
         # Capture frame by frame
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        # Display the resulting frame
+        cv2.imshow('Where Is The Human?',frame)
+
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.7, minNeighbors=5)
         for (x,y,w,h) in faces:
             print(x,y,w,h)
@@ -87,9 +91,6 @@ try:
 
             lmf(0.5) # Move toward the human
             rmf(0.5)
-
-        # Display the resulting frame
-        cv2.imshow('Where Is The Human?',frame)
         
         # Press 'Q' to quit
         #if cv2.waitKey(20) & 0xFF == ord('q'):
