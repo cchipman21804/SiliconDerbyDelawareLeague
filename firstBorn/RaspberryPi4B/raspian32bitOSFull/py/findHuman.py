@@ -59,8 +59,8 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 print("try it")
-try:
-    while (True):
+while (True):
+    try:
         stop() # Stop the motors
         # Capture frame by frame
         ret, frame = cap.read()
@@ -97,7 +97,8 @@ try:
         #if cv2.waitKey(20) & 0xFF == ord('q'):
         #    break
 
-except KeyboardInterrupt:
-    # Clean up
-    cap.release()
-    cv2.destroyAllWindows()
+    except KeyboardInterrupt:
+        break
+# Clean up
+cap.release()
+cv2.destroyAllWindows()
