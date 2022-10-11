@@ -41,8 +41,8 @@ def rmb(s):
 # Raspberry Pi path for OpenCV data:
 #/usr/local/lib/python3.9/dist-packages/cv2/data/
 datafldr='/usr/local/lib/python3.9/dist-packages/cv2/data/'
-# face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_default.xml')
-face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_alt2.xml')
+face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_default.xml')
+# face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalface_alt2.xml')
 # face_cascade = cv2.CascadeClassifier(datafldr+'haarcascade_frontalcatface.xml')
 cap = cv2.VideoCapture(0)
 
