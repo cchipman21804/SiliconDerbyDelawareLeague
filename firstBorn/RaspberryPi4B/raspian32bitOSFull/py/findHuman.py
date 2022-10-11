@@ -89,7 +89,7 @@ while (True):
         rmf(0.5)
 
     # Display the resulting frame
-    cv2.imshow('frame',frame)
+    cv2.imshow('Where Is The Human?',frame)
     
     # Press 'Q' to quit
     if cv2.waitKey(20) & 0xFF == ord('q'):
