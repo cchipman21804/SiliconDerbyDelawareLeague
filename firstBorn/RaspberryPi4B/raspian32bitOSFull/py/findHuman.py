@@ -58,6 +58,7 @@ dirR = 27 #27 or 24  # Pin 6 goes HIGH
 motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
+stop()
 #print("try it")
 while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
 #    try:
@@ -85,14 +86,14 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
         
-        lmf(0.5) # Move toward the human
-        rmf(1.0)
+#        lmf(0.5) # Move toward the human
+#        rmf(1.0)
 #        cwSpin()
-        sleep(0.5)
+#        sleep(0.5)
 #        stop()
 #        ccwSpin()
 #        sleep(0.5)
-        stop()
+#        stop()
     
     # Press 'Q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
