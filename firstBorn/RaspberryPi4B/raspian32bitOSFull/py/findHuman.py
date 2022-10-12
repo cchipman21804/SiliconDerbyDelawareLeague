@@ -67,9 +67,6 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Display the resulting frame
-    cv2.imshow('Where Is The Human?',frame)
-
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.7, minNeighbors=5)
     for (x,y,w,h) in faces:
         print(x,y,w,h)
@@ -85,7 +82,10 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         end_x = x+w
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
-        
+
+        # Display the resulting frame
+        cv2.imshow('Where Is The Human?',frame)
+
 #        lmf(0.5) # Move toward the human
 #        rmf(1.0)
 #        cwSpin()
