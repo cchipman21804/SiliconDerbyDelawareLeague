@@ -59,10 +59,8 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=True)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 #
 stop()
-#print("try it")
-while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
-#    try:
-    #stop() # Stop the motors
+isHuman = False
+while (True):
     # Capture frame by frame
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -82,6 +80,14 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         end_x = x+w
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
+        isHuman = True
+#
+    # Display the resulting frame
+    cv2.imshow('Is This A Human?',frame)
+    if isHuman:
+        lmf(0.5) # Move toward the human
+        rmf(1.0)
+    else: stop()
 #
 #        lmf(0.5) # Move toward the human
 #        rmf(1.0)
@@ -91,10 +97,6 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
 #        ccwSpin()
 #        sleep(0.5)
 #        stop()
-    
-
-    # Display the resulting frame
-    cv2.imshow('Is This A Human?',frame)
 
     # Press 'Q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
