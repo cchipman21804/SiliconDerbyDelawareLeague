@@ -61,6 +61,7 @@ motorRight = PhaseEnableMotor(dirR,goR,pwm=True)
 stop()
 
 while (True):
+    isCat = False
     # Capture frame by frame
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -79,15 +80,17 @@ while (True):
         end_x = x+w
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke)
-        
+        isCat = True
+
+    # Display the resulting frame
+    cv2.imshow('frame',frame)
+    if isCat:
         cwSpin()
         sleep(0.25)
         ccwSpin()
         sleep(0.25)
         stop()
-
-    # Display the resulting frame
-    cv2.imshow('frame',frame)
+    else: stop()
     
     # Press 'Q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
