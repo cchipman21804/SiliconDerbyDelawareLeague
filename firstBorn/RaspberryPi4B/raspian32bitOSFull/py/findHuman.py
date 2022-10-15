@@ -72,6 +72,10 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         print(x,y,w,h)
         roi_gray = gray[y:y+h,x:x+w]
         roi_color = frame[y:y+h,x:x+w]
+
+        # Display the resulting frame
+        cv2.imshow('Is This A Human?',frame)
+
 #
 # Send this to web server?
 #        img_item = "myface.png"
@@ -82,10 +86,6 @@ while (True): #cv2.waitKey(1) & 0xFF != ord('q')):
         end_x = x+w
         end_y = y+h
         cv2.rectangle(frame,(x,y),(end_x,end_y),color,stroke) # Frame window would not display during PWM motor activation
-
-        # Display the resulting frame
-        cv2.imshow('Where Is The Human?',frame)
-
 #        lmf(0.5) # Move toward the human
 #        rmf(1.0)
 #        cwSpin()
