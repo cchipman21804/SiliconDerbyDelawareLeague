@@ -70,11 +70,6 @@ while (True):
         print(x,y,w,h)
         roi_gray = gray[y:y+h,x:x+w]
         roi_color = frame[y:y+h,x:x+w]
-#
-# Send this to web server?
-#        img_item = "myface.png"
-#        cv2.imwrite(img_item, roi_gray)
-#
         color = (255,255,255) # BGR
         stroke = 4 # line thickness
         end_x = x+w
@@ -89,21 +84,11 @@ while (True):
         rmf(1.0)
     else: stop()
 #
-#        lmf(0.5) # Move toward the human
-#        rmf(1.0)
-#        cwSpin()
-#        sleep(0.5)
-#        stop()
-#        ccwSpin()
-#        sleep(0.5)
-#        stop()
 
     # Press 'Q' to quit
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-#    except KeyboardInterrupt: # Frame window would not display during try:
-#        break
 # Clean up
 cap.release()
 cv2.destroyAllWindows()
