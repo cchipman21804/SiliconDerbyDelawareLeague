@@ -100,7 +100,7 @@ motorLeft = PhaseEnableMotor(dirL,goL,pwm=False)
 motorRight = PhaseEnableMotor(dirR,goR,pwm=False)
 #
 # hard-coded values for min & max pulse width are suitable for the
-# Parallex Standard Servo (#900-00005) 180 degree movement
+# Parallex Standard Servo (#900-00005) 180 degree movement connected to GPIO pin 4
 servo = Servo(4,min_pulse_width=0.75/1000,max_pulse_width=2.25/1000)
 #
 class MyController(Controller):
