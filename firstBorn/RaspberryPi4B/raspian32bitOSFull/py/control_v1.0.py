@@ -159,7 +159,8 @@ class MyController(Controller):
 
     def on_L2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L2RlsMsg}]")
-        stop()
+        #stop()
+        lmf(0)
 
     def on_R2_press(self,name):
         speed=(name+32768)/65535
@@ -168,11 +169,13 @@ class MyController(Controller):
 
     def on_R2_release(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R2RlsMsg}]")
-        stop()
+        #stop()
+        rmf(0)
 
     def on_L3_y_at_rest(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{L3JoyCntrMsg}]")
-        stop()
+        #stop()
+        lmf(0)
 
     def on_L3_up(self,name):
         speed=abs(name)/32767
@@ -196,7 +199,8 @@ class MyController(Controller):
 
     def on_R3_y_at_rest(self):
         print(f"[{pgmName}] [{dt.datetime.now().strftime('%a %b %d %Y @%H:%M:%S.%f')}]> [{R3JoyCntrMsg}]")
-        stop()
+        #stop()
+        rmf(0)
 #
 # Find all input devices
 inputDevices = os.listdir('/dev/input')
