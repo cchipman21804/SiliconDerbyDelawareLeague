@@ -87,9 +87,9 @@ while (True):
     if isCat:
         if w < 200: # Move toward Jackson
             if (x+end_x)/2 > 350: # Turn left to center Jackson in frame
-                rmf(1)
+                lmf(0.5)
             elif (x+end_x)/2 < 250: # Turn right to center Jackson in frame
-                lmf(1)
+                rmf(0.75)
             else: # Move straight toward Jackson
                 lmf(1)
                 rmf(1)
