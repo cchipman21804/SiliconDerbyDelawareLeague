@@ -88,7 +88,9 @@ while (True):
         if w < 200: # Move toward Jackson
             if (x+end_x)/2 > 350: # Turn right to center Jackson in frame
                 lmf(0.8)
+                rmb(0.8)
             elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
+                lmb(0.8)
                 rmf(0.8)
             else: # Move straight toward Jackson
                 lmf(0.5)
