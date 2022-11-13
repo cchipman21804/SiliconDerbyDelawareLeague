@@ -91,8 +91,8 @@ while (True):
             elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
                 rmf(0.7)
             else: # Move straight toward Jackson
-                lmf(0.3)
-                rmf(0.6)
+                lmf(0.5)
+                rmf(0.8)
         #cwSpin()
         #sleep(0.25)
         #ccwSpin()
