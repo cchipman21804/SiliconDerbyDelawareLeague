@@ -36,6 +36,7 @@ py/wifi-car.py ------- retrieves contents of txt/* and translates their contents
                        circuits
 py/control_v1.0.py --- allows robot to be remotely controlled via a PS4 game controller
                        (requires installation of Python module pyPS4Controller)
+py/findHuman.py ------ allows robot to react to its environment based on what it identifies in the video camera stream (requires installation of OpenCV)
 
 txt ------------------ non-volatile storage for current command & current speed
 txt/command.txt ------ stores current directional command
