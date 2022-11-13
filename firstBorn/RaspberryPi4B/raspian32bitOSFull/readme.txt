@@ -34,6 +34,8 @@ py/video-stream.py --- initiates video stream from the Raspberry Pi's camera for
                        (requires Legacy Camera Support enabled in raspi-config)
 py/wifi-car.py ------- retrieves contents of txt/* and translates their contents into GPIO commands which operate the vehicle's DC motors through H-bridge control
                        circuits
+py/control_v1.0.py --- allows robot to be remotely controlled via a PS4 game controller
+                       (requires installation of Python module pyPS4Controller)
 
 txt ------------------ non-volatile storage for current command & current speed
 txt/command.txt ------ stores current directional command
