@@ -90,8 +90,8 @@ while (True):
                 lmf(0.4) # 0.8 on carpet, 0.4 on HW floor
                 rmb(0.25)
             elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
-                lmb(0.4)
-                rmf(0.25)
+                lmb(0.25)
+                rmf(0.5)
             else: # Move straight toward Jackson
                 lmf(0.3) # 0.5 on carpet, 0.3 on HW floor
                 rmf(0.6) # 0.8 on carpet, 0.6 on HW floor
