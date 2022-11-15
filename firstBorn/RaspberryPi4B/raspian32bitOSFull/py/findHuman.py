@@ -93,8 +93,8 @@ while (True):
                 lmb(0.8) # 0.8 on carpet, 0.4 on HW floor
                 rmf(0.8)
             else: # Move straight toward human
-                lmf(0.2)
-                rmf(0.5)
+                lmf(0.4)
+                rmf(0.6)
     else: stop()
 #
 
