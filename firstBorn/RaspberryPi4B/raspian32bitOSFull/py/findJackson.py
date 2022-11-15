@@ -97,8 +97,8 @@ while (True):
                 lmb(0.8) # 0.8 on carpet, 0.4 on HW floor
                 rmf(0.8)
             else: # Move straight toward Jackson
-                lmf(0.3) # 0.5 on carpet, 0.3 on HW floor
-                rmf(0.6) # 0.8 on carpet, 0.6 on HW floor
+                lmf(0.2) # 0.5 on carpet, 0.3 on HW floor
+                rmf(0.5) # 0.8 on carpet, 0.6 on HW floor
     else: stop()
     
     # Press 'Q' to quit
