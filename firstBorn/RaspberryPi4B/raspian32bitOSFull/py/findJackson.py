@@ -99,11 +99,6 @@ while (True):
             else: # Move straight toward Jackson
                 lmf(0.3) # 0.5 on carpet, 0.3 on HW floor
                 rmf(0.6) # 0.8 on carpet, 0.6 on HW floor
-        #cwSpin()
-        #sleep(0.25)
-        #ccwSpin()
-        #sleep(0.25)
-        #stop()
     else: stop()
     
     # Press 'Q' to quit
