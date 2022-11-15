@@ -66,7 +66,7 @@ while (True):
     # Capture frame by frame
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.7, minNeighbors=5)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=1)
     for (x,y,w,h) in faces:
         print(x,y,w,h)
         roi_gray = gray[y:y+h,x:x+w]
@@ -82,18 +82,18 @@ while (True):
     cv2.imshow('Is This A Human?',frame)
     if isHuman:
         if w < 200: # Move toward Jackson
-            if (x+end_x)/2 > 350: # Turn right to center Jackson in frame
+            if (x+end_x)/2 > 350: # Turn right to center human in frame
                 # As rectangle width enlarges (distance closes), decrease speed accordingly
                 # to keep rectangle within camera's field of view
                 lmf(0.4) # 0.8 on carpet, 0.4 on HW floor
                 rmb(0.4)
-            elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
+            elif (x+end_x)/2 < 250: # Turn left to center human in frame
                 # As rectangle width enlarges (distance closes), decrease speed accordingly
                 # to keep rectangle within camera's field of view
                 lmb(0.8) # 0.8 on carpet, 0.4 on HW floor
                 rmf(0.8)
-            else: # Move straight toward Jackson
-                lmf(0.2) # Move toward the human
+            else: # Move straight toward human
+                lmf(0.2)
                 rmf(0.5)
     else: stop()
 #
