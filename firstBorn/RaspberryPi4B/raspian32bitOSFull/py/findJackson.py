@@ -87,9 +87,13 @@ while (True):
     if isCat:
         if w < 200: # Move toward Jackson
             if (x+end_x)/2 > 350: # Turn right to center Jackson in frame
+                # As rectangle width enlarges (distance closes), decrease speed accordingly
+                # to keep rectangle within camera's field of view
                 lmf(0.5) # 0.8 on carpet, 0.4 on HW floor
                 rmb(0.25)
             elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
+                # As rectangle width enlarges (distance closes), decrease speed accordingly
+                # to keep rectangle within camera's field of view
                 lmb(0.25)
                 rmf(0.5)
             else: # Move straight toward Jackson
