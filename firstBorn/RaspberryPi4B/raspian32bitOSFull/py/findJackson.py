@@ -89,7 +89,7 @@ while (True):
             if (x+end_x)/2 > 350: # Turn right to center Jackson in frame
                 # As rectangle width enlarges (distance closes), decrease speed accordingly
                 # to keep rectangle within camera's field of view
-                lmf(0.8) # 0.8 on carpet, 0.4 on HW floor
+                lmf(0.4) # 0.8 on carpet, 0.4 on HW floor
                 rmb(0.8)
             elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
                 # As rectangle width enlarges (distance closes), decrease speed accordingly
