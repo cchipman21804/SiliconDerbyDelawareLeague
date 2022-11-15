@@ -70,11 +70,6 @@ while (True):
         print(x,y,w,h)
         roi_gray = gray[y:y+h,x:x+w]
         roi_color = frame[y:y+h,x:x+w]
-#
-# Send this to web server?
-#        img_item = "myface.png"
-#        cv2.imwrite(img_item, roi_gray)
-#
         color = (255,255,255) # BGR
         stroke = 4 # line thickness
         end_x = x+w
