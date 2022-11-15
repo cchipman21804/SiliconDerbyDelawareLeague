@@ -94,8 +94,8 @@ while (True):
             elif (x+end_x)/2 < 250: # Turn left to center Jackson in frame
                 # As rectangle width enlarges (distance closes), decrease speed accordingly
                 # to keep rectangle within camera's field of view
-                lmb(0.25)
-                rmf(0.5)
+                lmb(0.8) # 0.8 on carpet, 0.4 on HW floor
+                rmf(0.8)
             else: # Move straight toward Jackson
                 lmf(0.3) # 0.5 on carpet, 0.3 on HW floor
                 rmf(0.6) # 0.8 on carpet, 0.6 on HW floor
